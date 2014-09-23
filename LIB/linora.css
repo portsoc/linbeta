@@ -1,0 +1,21 @@
+/* CSS for Linora index.html		(c) Kit Lester 2013
+   ========================= */
+
+body			{ background-color:#ddddff; 
+			  font-family:Calibri,sans-serif; 
+			  font-size:12pt }
+
+fieldset		{ border-radius:10px; width:97% }
+fieldset legend		{ border-radius:5px; background:#bbbbff }
+
+div.header		{ position:fixed; text-align:center; width:24pc; background:#bbbbff }
+div.title		{ float:left }
+div.shows		{  }
+div.clear		{ clear:both }
+
+table.LinkTable 	{ width:100%; border:none; padding:0 }
+table.LinkTable td 	{ border:none; padding:2 }
+table.LinkTable tr:nth-child(odd)  td
+			{ border:none; padding:2; background-color:#e8e8ff }
+table.LinkTable tr:nth-child(even) td 
+			{ border:none; padding:2; background-color:#d3d3ff }

@@ -1,0 +1,533 @@
+<html>
+    <head>
+        <title>README for Linora</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta http-equiv="content-script-type" content="text/javascript"/>
+        <script src="LIB/(string.uriencodes).js"></script>
+        <script src='LIB/(ajax.get).js'></script>
+
+        <script> /* too simple to justify the extra clutter of a .JS file */
+
+            function saveToView(text)
+              { document.getElementById('view').innerHTML=text; }
+
+            function view(filename)
+              {        document.getElementById('filename').innerHTML = filename;
+                        // Set the filename as the display-box's legend.
+                safetarget = '';
+                for (i=0; i<filename.length; i++)
+                      { c=filename.charAt(i);
+                        safetarget +=  ( c=='#' ? '%23'
+                                       : c==' ' ? '%20' : c ); }
+                // document.getElementById('filename').innerHTML = safetarget; // DBug
+                klib.ajax.get('API/readme.get.ajax.php?file='+safetarget,
+                              saveToView); }
+
+           /* The following is for the hide-or-show buttons */
+            window.onload = function(event)
+              { var x;
+                x = document.getElementById('button1id')
+                x.onclick = function (event) { flip('section1id','button1id'); }
+                x = document.getElementById('button2id')
+                x.onclick = function (event) { flip('section2id','button2id'); }
+                x = document.getElementById('button3id')
+                x.onclick = function (event) { flip('section3id','button3id'); }
+                x = document.getElementById('button4id')
+                x.onclick = function (event) { flip('section4id','button4id'); }
+                x = document.getElementById('button5id')
+                x.onclick = function (event) { flip('section5id','button5id'); }
+              }
+
+            function flip (sectionid,buttonid)
+              { var section = document.getElementById(sectionid).style;
+                var button  = document.getElementById(buttonid);
+                if (section.display=='none')
+                     { section.display ='block'; button.value='Hide'; }
+                else { section.display ='none';  button.value='Show'; } }
+
+        </script>
+
+        <style> /* minimal: too simple to bother with a .CSS file */
+            body		{ font-family:Arial; font-size:12pt }
+	    span.viewer		{ color:blue }
+	    span.viewer:hover   { background:yellow }
+	    td			{ vertical-align:top }
+	    /* The following is for the hide-or-show buttons */
+	    div.hideorshow { clear:right; float:right; margin:2pt 0 0 1em; }
+	    /* For the Contents */
+	    div.contents	{ width:12em; float:right; margin:0 0 2pt 1em;
+				  padding:3pt;background:#dddddd; font-size:10pt; }
+	    h3			{ clear:right }
+	</style>
+
+    </head>
+
+<body>
+
+    <article>
+    
+	<div class=contents>
+	    <b>Contents:</b>
+	    <li><a href="#install">1. Installing Linora</a></li>
+	    <li><a href="#issues">2. Known issues</a></li>
+	    <li><a href="#dirfiles">3. Directories &amp; files</a></li>
+	    <li><a href="#history">4. Release History</a></li>
+	    <li><a href="#maint">5. Maintainance notes</a></li>
+	</div>
+    
+    <h2>Linora distribution notes</h2>
+
+	<p>This page presents notes and other support needed by installers and
+	maintainers of Linora.<br></p>
+
+
+	<h3><a name="install"></a>
+	    <div class=hideorshow><input type=button value='Hide' id=button1id></div>
+	    1. Installing Linora</h3>
+
+	<section id=section1id>
+
+	    <p>Upload the files in this folder and its' subfolder EXCEPT files
+	    whose names start with #, or whose names include .#.</p><ul>
+
+		<li>either to the site root directory as a whole site,</li>
+
+		<li>or to a new directory (preferably named "linora") to act as a
+		subsite.</li></ul>
+
+	    <p>Clearly, Linora is then started by browsing to the appropriate
+	    one of<br><tt>
+
+	    &nbsp;&nbsp;&nbsp;&nbsp;http://<i>domain</i>/<br>
+	    &nbsp;&nbsp;&nbsp;&nbsp;http://<i>domain</i>/<i>path</i><br>
+	    &nbsp;&nbsp;&nbsp;&nbsp;http://<i>domain</i>/<i>path</i>/linora</tt></p>
+
+	    <p>[The #-named files are for installer/maintainer support, mostly
+	    willfully gash to indicate their status as &ldquo;not to be seen
+	    by end-users&rdquo; &ndash; starting with this rule-breaking page
+	    (mix of everything from HTML1 to HTML5! explicit event-handlers!
+	    to minimize needed files in-built JS and minimal in-built
+	    CSS!).]</p>
+
+	    <p>See part 3 for notes on suggested protections.</p>
+
+	<br></section>
+
+
+	<h3><a name="issues"></a>
+	    <div class=hideorshow><input type=button value='Hide' id=button2id></div>
+	    2. Known issues with this release</h3>
+
+	<section id=section2id>
+
+
+            <ul><li><b>Immediate</b> (a.k.a. bugs):
+                    
+                    <ul><li><b>Race condition:</b> entering a new URL when the
+                            links are also showing was intended (after a brief
+                            pause) also show th new link: sometimes it does,
+                            but somtime it doesn't. The way the code works is
+                            that it fires off an asynchronous ajax call for
+                            the entry, then fires off an asynchonous ajax call
+                            for the opdate of the links: of the entry call
+                            completes first, all is well, but if the update
+                            call overtakes the entry call then the update is
+                            from the <i>old</i> (i.e. unpdated) data in the
+                            database. The obvious fix would be to make the
+                            data-entry call synchronous.</li>
+                    
+                        <li><b>loss of &ldquo;http://&rdquo; when a link is
+                            dragged to the URL field of the &ldquo;add-a-link
+                            form:</b> when Linora was first written, this drag
+                            worked OK. Since then, Chrome suppessed the
+                            "http://" part, and the other borowsers followed
+                            (like a pack of lemmings). So the obvious fix is
+                            for either the data-entry javascript of the
+                            data-entry API reponder to look at the URL for
+                            whter it contains "://", and if not prefix it with
+                            "http://". Hopefully the browsers all leave
+                            https://, ftp://, file:/// etc alone - so far I've
+                            only checked it for Chrome and Firefox. And
+                            there's always the danger that what works from one
+                            window of a browser to another window of the
+                            <i>same</i> browser will go wrong for some
+                            combination of different browsers - so testing all
+                            combinations of the 5 major browsers will be 25
+                            tests times at least the three extra prefixes...
+                            </li></ul></li>
+
+                <li><b>Longer term</b> (a.k.a. missing facilities):<ul>
+                            
+                    <li>editing and deleting entries,</li>
+                    
+                    <li>category-oriented viewing, recategorixing, etc.</li></ul</li>
+
+	    </ul>
+
+
+	</section>
+
+
+	<h3><a name="dirfiles"></a>
+	    <div class=hideorshow><input type=button value='Hide' id=button3id></div>
+		3. Directories and files in this release.</h3>
+
+	    <section id=section3id>
+
+	    <p>Suggested protections: on opersting systems that provide the
+	    capability, files to be protected against direct off-site access,
+	    directories to be protected as below.</p>
+
+	    <p>In the following table, click a file-name in the middle column
+	    to display the contents of that file in the box just after the
+	    table. ['Fraid it's only one file at a time.]</p>
+
+	    <table border=1 cellspacing=0 cellpadding=2>
+
+	    <tr bgcolor=#999999><td colspan=4></td></tr>
+
+	    <tr bgcolor='#cccccc'><td><i>(root)</i></td>
+		<td>(directory)</td>
+		<td colspan=2>This directory should ideally be protected so that only
+		default-named files (in this case index.php) can be accessed over the
+		web.</td></tr>
+
+	    <tr><td><i>(root)</i></td>
+		<td><span class=viewer
+			  onclick='view("index.php");'>index.php</span></td>
+		<td>The (one and only) LINORA PAGE.<br><br>See the start of
+		    this file for the main development history. Loads
+		    linora.js, linora.css for itself, and for linora.js it
+		    loads (string.uriencodes).js, (ajax.get).js,
+		    (ajax.post).js</td>
+		<td rowspan=2>These, + API/Linora.* + API/(LINORA) + the API
+		    responders <i>are</i> Linora. All the rest are
+		    multi-application.</td></tr>
+	    <tr><td><i>(root)</i></td>
+		<td><span class=viewer
+			  onclick='view("help.get.html");'>help.get.html</span></td>
+		<td>The HELP that Linora displays on request.</td></tr>
+
+	    <!--
+	    <tr><td><i>(root)</i></td>
+		<td><span class=viewer
+			  onclick='view("#review.get.html");'>#review.get.html</span></td>
+		<td>__</td>
+		<td>This should be merged into the history stuff in this
+            		README page.</td></tr>
+	    -->
+
+
+	    <tr bgcolor=#999999><td colspan=4></td></tr>
+	    <tr bgcolor='#cccccc'><td>LIB/</td>
+		<td>(directory)</td>
+		<td colspan=2>This directory should be protected so that no
+		    files can be directly accessed over the web.</td></tr>
+
+	    <tr><td>LIB/</td>
+		<td><span class=viewer
+			  onclick='view("LIB/linora.js");'>linora.js</span></td>
+		<td>All of Linora's own JavaScript.</td>
+		<td rowspan=2>Linora-specific support for the index.php.</td></tr>
+	    <tr><td>LIB/</td>
+		<td><span class=viewer
+			  onclick='view("LIB/linora.css");'>linora.css</span></td>
+		<td>All of Linora's own CSS</td></tr>
+
+	    <tr><td>LIB/</td>
+		<td><span class=viewer
+			  onclick='view("LIB/(ajax.get).js");'>(ajax.get).js</span></td>
+		<td>Does a AJAX method=GET call</td>
+		<td rowspan=3>Multi-application utilities.</td></tr>
+	    <tr><td>LIB/</td>
+		<td><span class=viewer
+			  onclick='view("LIB/(ajax.post).js");'>(ajax.post).js</span></td>
+		<td>Does a AJAX method=POST call</td></tr>
+
+	    <tr><td>LIB/</td>
+		<td><span class=viewer
+			  onclick='view("LIB/(string.URIencodes).js");'>(string.URIencodes).js</span></td>
+		<td>Used by the above to ensure ""safe"" URIs</td></tr>
+
+	    <!--
+	    <tr><td>LIB/</td>
+		<td><span class=viewer
+			  onclick='view("LIB/(ajax.get).demo-data.#.php");'>(ajax.get).demo-data.#.php</span></td>
+		<td>__</td>
+		<td rowspan=8>Used to demonstrate and test the
+		    (ajax.<i>xxx</i>)s in the Linora context, and to test and
+		    debug the API responders, and thereby also validate their
+		    calls from linora.js.</td></tr>
+	    <tr><td>LIB/</td>
+		<td><span class=viewer
+			  onclick='view("LIB/(ajax.get).demo-data.#.txt");'>(ajax.get).demo-data.#.txt</span></td>
+		<td>__</td></tr>
+	    <tr><td>LIB/</td>
+		<td><span class=viewer
+			  onclick='view("LIB/(ajax.get).demo.#.html");'>(ajax.get).demo.#.html</span></td>
+		<td>__</td></tr>
+	    <tr><td>LIB/</td>
+		<td><span class=viewer
+			  onclick='view("LIB/(ajax.get).TEST.#.htm");'>(ajax.get).TEST.#.htm</span></td>
+		<td>__</td></tr>
+	    <tr><td>LIB/</td>
+		<td><span class=viewer
+			  onclick='view("LIB/(ajax.get).TESTdata.#.txt");'>(ajax.get).TESTdata.#.txt</span></td>
+		<td>__</td></tr>
+	    <tr><td>LIB/</td>
+		<td><span class=viewer
+			  onclick='view("LIB/(ajax.post).TEST.#.htm");'>(ajax.post).TEST.#.htm</span></td>
+		<td>__</td></tr>
+	    <tr><td>LIB/</td>
+		<td><span class=viewer
+			  onclick='view("LIB/(ajax.post).TESTactor.#.php");'>(ajax.post).TESTactor.#.php</span></td>
+		<td>__</td></tr>
+	    <tr><td>LIB/</td>
+		<td><span class=viewer
+			  onclick='view("LIB/@entry.post.TEST.#.php");'>@entry.post.TEST.#.php</span></td>
+		<td>__</td></tr>
+	    -->
+
+
+	    <tr bgcolor=#999999><td colspan=4></td></tr>
+	    <tr bgcolor='#cccccc'><td>API/</td>
+		<td>(directory)</td>
+		<td colspan=2>If third-party access is desired, this directly
+		    should be deprotected to be directly accessible from the
+		    web - until then it should be protected against direct
+		    access. Such third-party access should impy upgrades to
+		    the responders, to validate requests as coming from
+		    permitted URIs..</td></tr>
+
+
+	    <tr><td>API/</td>
+		<td><span class=viewer
+			  onclick='view("API/entry.insert.ajax.php");'>entry.insert.ajax.php</span></td>
+		<td>Inserts an entry into the database.</td>
+		<td rowspan=2>Linora's API responders to be AJAXed by
+		    Linora.js or by third-party front-ends.<br><br>Each (1)
+		    defines whether we are logging and/or debugging, and (2)
+		    INCLUDE (LINORA), (DB_EASY), and (if required) LOGGING
+		    PHPs.</tr>
+	    <tr><td>API/</td>
+		<td><span class=viewer
+			  onclick='view("API/links.get.ajax.php");'>links.get.ajax.php</span></td>
+		<td>Gets the entries from the database.</td></tr>
+
+
+	    <tr bgcolor=#999999><td colspan=4></td></tr>
+	    <tr bgcolor='#cccccc'><td>API/hidden/</td>
+		<td>(directory)</td>
+		<td colspan=2>Files used by the API, but which shoulnd't be
+		    visible to even third-party API-users: currently only
+		    INCLUDEs, and logging stuff. (So, e.g. in a SQLite-based
+		    version of Linora, the .DB file would also fo in this
+		    "hidden" directory.) THIS DIRECTORY SHOULD BE PROTECTED SO
+		    THAT NO FILES CAN BE DIRECTLY ACCESSED OVER THE
+		    WEB.</td></tr>
+
+	    <tr><td>API/hidden/</td>
+		<td><span class=viewer
+			  onclick='view("API/hidden/(DB_EASY).inc.php");'>(DB_EASY).inc.php</td>
+		<td>Starting at version 1e, using PDO and (especially) Prepared
+		    Statements</td>
+		<td rowspan=2>Multi-application utility for accessing a
+		    database, used by the responders.</td></tr>
+	    <!--
+	    <tr><td>API/hidden/</td>
+		<td><span class=viewer
+			  onclick='view("API/hidden/(DB_EASY) in mysqli.inc.php");'>(DB_EASY) in mysqli.inc.php</span></td>
+		<td>Old mysqli-based version of DB_easy</td></tr>
+	    -->
+
+	    <tr><td>API/hidden/</td>
+		<td><span class=viewer
+			  onclick='view("API/hidden/(LINORA).inc.php");'>(LINORA).inc.php</td>
+		<td colspan=2>Configures DB_easy for use by Linora by
+		    (1) defining constants needed to establish a connection: also
+		    (2) providing a function needed by DB_easy to CREATE
+			TABLEs when the DB itself has just been CREATEd.</td></tr>
+
+	    <!--
+	    <tr><td>API/hidden/</td>
+		<td><span class=viewer
+			  onclick='view("API/hidden/entry.ins.TEST-DRIVER.#.htm");'>entry.ins.TEST-DRIVER.#.htm</td>
+		<td colspan=2>As it says on the box - for test-driving
+		    entry.insert.</td></tr>
+		-->
+	    <tr><td>API/hidden/</td>
+		<td><span class=viewer
+			  onclick='view("API/hidden/LOGGING.inc.php");'>LOGGING.inc.php</span></td>
+		<td>Logger INCLUDE</td></td>
+
+		<td rowspan=2>For logging, if that has been configures in the
+		    responders.</tr>
+	    <tr><td>API/hidden/</td>
+		<td><span class=viewer
+			  onclick='view("API/hidden/_API_.LOG");'>_API_.LOG</td>
+		<td>The LOG-file, if logging is enabled.</td></tr>
+
+	    <!--
+	    <tr bgcolor=#999999><td colspan=4></td></tr>
+	    <tr bgcolor='#cccccc'><td><i>(root)</i>/../</td>
+		<td>(directory)</td>
+		<td colspan=2>Non-delivered files</td></tr>
+	    <tr><td><i>(root)</i>/../</td>
+		<td><span class=viewer
+			  onclick='view("../[ ## style guide ## ].txt");'>[ ## style guide ## ].txt</td>
+		<td>What it says on the box.</td>
+		<td rowspan=2>Development notes.</td></tr>
+	    <tr><td><i>(root)</i>/../</td>
+		<td><span class=viewer
+			  onclick='view("../[ ## TO DO ## ].txt");'>[ ## TO DO ## ].txt</span></td>
+		<td>What it says on the box. Should probably migrate into this
+		    file.</td></tr>
+	    -->
+
+	    <tr bgcolor=#999999><td colspan=4></td></tr>
+
+	    </table><br>
+
+
+	    <fieldset style='border-radius:5px'>
+		<legend id=filename>For viewing a selected file.</legend>
+		<pre><tt><div id='view'>Click on a filename in the 2<sup>nd</sup> column above to view its&apos; contents here.</div></tt></pre>
+	    </fieldset>
+
+	</section>
+
+
+	<h3><a name="history"></a>
+	    <div class=hideorshow><input type=button value='Hide' id=button4id></div>
+	    4. Release History</h3>
+
+	<section id=section4id>
+
+	    <ul>
+
+		<li>1d &ndash; first properly usable version</li>
+
+		<li>1e &ndash; conversion to PDO, and some directory
+                    re-organization to facilitate sensible
+                    directory-protections.</li>
+
+		<!--
+		<li>__ &ndash; __</li>
+		-->
+
+	    </ul>
+
+	</section>
+
+
+	<h3><a name="maint"></a>
+	    <div class=hideorshow><input type=button value='Hide' id=button5id></div>
+	    5. Maintainance notes</h3>
+
+	<section id=section5id>
+
+	    <p>A few. Inevitably incomplete.</p>
+
+	    <p>The  opportunity  has been taken to use CSS to make the top-bar
+            look  nicer.  Also, (1) the  header  titles  have  been  made less
+            agressive,  and (2) each of the three  parts has been  boxed, with
+            their  titles  becoming  legends  (a  somewhat   improper  use  of
+            &lt;fieldset&gt;, but what else enables legends?)</p>
+
+	    <p>Turning   Linora's   sections  into   fieldsets   enabled  more
+            consistency in the "show" javascript.</p>
+
+	    <p>Originally  the URL input  field was long, but that  forced the
+            page wide, so one had to pan a lot to read the rest of the page..:
+            so a sacrifice  was  necessary  &ndash; that field has been cut to
+            the same  length as the  fields to enable  the window to be narrow
+            without  needing  silly  panning.  The  price of that is that even
+            medium-lenght URLs flow out of the field, one way ot the other.</p>
+
+	    <p>More  experience in using Linora will probably  cause a revisit
+            of the layout.</p>
+	    
+	    <h4>Forward-looking reflections after version 1d</h4>
+	    
+	    <p>This  was  the  first  version  with  enough  usability  that I
+            collected  a good  supply of links: so was time to pause and THINK
+            &ndash; not merely react.</p>
+	    
+	    <p>So this  subnsection  is a  <i>review</i>,  not merely a simple
+            defects  list. It considers at least  medium-term  ambitions,  not
+            just instant issues.</p>
+	    
+	    <p>Experience  of  significant  use  led to  changes  to  imnprove
+            usability: but one issue remains.</p>
+	    
+	    <p>There's  also a strategic  issue for the  development  process:
+            repeatedly  copying a folder, and editing the new one is already a
+            bit of a hassle,  which  will get much worse when we start  adding
+            more facilities. Also, using the version-zero prototype leads to a
+            suspicion  that Linora will get big and  complex,  which will make
+            the na&iuml;ve copy-folder process even worse.</p>
+	    
+	    <p>Let's get the <b>development strategy issue</b> out of the way,
+            then come back to the more fiddly usability issue.</p>
+	    
+	    <p>Major development is likely to imply that we will have multiple
+            developments  running  in  parallel  at the  same  time,  with the
+            developments  having different start- and stop-dates. Mapping that
+            onto a simple  linear set of versions will be messy,  error-prone,
+            and inefficient: so we need something like the GIT  source-version
+            control system, with each parallel process being  represented by a
+            "branch"  in GIT's  "repository".  That  way, when a new  parallel
+            development  starts, we can create a new  branch:  when it ends we
+            can "merge" it back into the live version.</p>
+	    
+	    <p>However,  the the early  versions of Linora have the  secondary
+            purpose of being used in teaching, developed by a single person at
+            a time, and that implies the initial  developments MUST be linear.
+            CONCLUSION:  we'll  stick with a LOT of  copy-folder  subversions,
+            each  representing a single  indivisible  development. When we get
+            beyond  the  "use for  teaching"  versions,  THEN  we'll  consider
+            GITifying the development.</p>
+	    
+	    <p>Going  back to the  <b>usability  issue</b>:  Using Linora in a
+            second  wondow to drag links from a "main" other window means that
+            the  link-grabber  needs to be a  <small>small</small>  window, so
+            that it doesn't take up a lot of screen  space: but the  "archived
+            links" display needs to be a window that will (usually) be the one
+            to  be   re-used   when   we   click   on  one  of  the   archived
+            links...</li></p>
+	    
+	    <p>That  raises thwe  question of wheter Linora should be one page
+            for grabbing  links, and another for displaying  them? But this is
+            an obvious page for people to make their  browser "home" page, and
+            browsers only enable <i>one</i> such page. (I cheat that a little:
+            with three main uses of my main  computer,  I use  different  home
+            pages in Firefox,  Chrome and Safari, then fire up the browser for
+            that home page and  bookmarks.  But that's the sort of  workaround
+            that  Linora  should  make  unneccessary.)  If we make  one of the
+            grabber and the display the ONE home page, it could have a link to
+            the other. But a simpler  and more direct  solution is to have one
+            page with  something  like tabs to pick which one of the  displays
+            should  be live at any  time.  But as I used  this  draft,  rather
+            heavily at first, it was only a few hours  until I briefly  wanted
+            <i>both</>  the  grabber and the display at the same  time... So I
+            decided  that they'll both be "on/off" so that it's easy to select
+            either. both or neither</i> &ndash; the sensible way to do that is
+            with two checkboxes.  (Perhaps  buttons, later, if users feel that
+            they are "more modern".)</i></p>
+	    
+	    <p>That  on/off  thought led on to the issues of the  screen-space
+            for the initial  "help": most of the time  it&apos;  space-wasting
+            clutter. So added  another  show-or-not  checkbox  for the initial
+            help, and AJAX  that from a file  named  HELP.INC.HTML,  since the
+            help is unlikely to have any need for internal JavaScript.</p>
+	    
+	    <p>I'll  keep the above  analysis  and  schedule in version  one's
+            reviews, but updated as the work gets done.</p>
+
+	</section>
+
+    </article>
+
+
+</font>
+</body></html>
