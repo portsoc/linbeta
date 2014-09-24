@@ -1,7 +1,6 @@
 <?php	// DB_UTILS.INC.PHP - Re-usable database		(c) C Lester
 	// ================   utilities in PDO     2013 (mysqli), 2014 (PDO)
 
-
 class DB_easy {
 
     /* ============================== PRIVATE =========================== */
@@ -57,19 +56,29 @@ class DB_easy {
     // where $DB refers to the current connection object, and $EZ refers to
     // this instance of DR_easy.
 
-    public function __construct()
-      { global $_DB;
-	//
-	// CONNECT TO THE DATABASE SERVER
-        $dsn = "mysql:"._db_host_.";charset=UTF-8";
-	$option = array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION);
-			// Manana: maybe also PDO::ATTR_PERSISTENT=>TRUE ??
-	try { $_DB = new PDO($dsn,_db_user_,_db_pw_,$option); }
-	    catch (PDOException $failure)
-	          { DB_easy::Failure("CONNECT failed - ".
-					$_DB->getCode()." ".
-	    				$_DB->getInfo()," ".
-					$file,$line); }
+    public function __construct() {
+    	global $_DB;
+
+
+		// CONNECT TO THE DATABASE SERVER
+	    $dsn = "mysql:"._db_host_.";charset=UTF-8";
+		$option = array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION);
+		// Manana: maybe also PDO::ATTR_PERSISTENT=>TRUE ??
+
+		try {
+
+			$_DB = new PDO($dsn,_db_user_,_db_pw_,$option);
+
+		} catch (PDOException $failure) {
+			echo  $failure;
+			// DB_easy::Failure("CONNECT failed - ".
+			// 	$_DB->getCode()." ".
+		 	//	$_DB->getInfo()," ".
+			// 	$file,
+			// 	$line
+			// );
+		}
+
 	// DOES THE DATABASE EXIST YET?
 	if (DB_easy::DB_exists($_DB,_db_name_))
           //

@@ -15,11 +15,11 @@
 
     DEFINE ( "_logging_",	TRUE );
     DEFINE ( "_log_source_",	"INSERT LINK-ENTRY" );
-    DEFINE ( "_log_filename_",	"_API_.LOG" );
+    DEFINE ( "_log_filename_",	$_SERVER["DOCUMENT_ROOT"] . "/API/_API_.LOG" );
 
-    INCLUDE "hidden\(LINORA).inc.php";	// Linora-specific defines and function
-    INCLUDE "hidden\(DB_EASY).inc.php";// Reusable mysqli-database utilities
-    if (_logging_) INCLUDE "hidden\LOGGING.inc.php";
+    INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/API/hidden/(LINORA).inc.php";	// Linora-specific defines and function
+    INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/API/hidden/(DB_EASY).inc.php";// Reusable mysqli-database utilities
+    if (_logging_) INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/API/hidden/LOGGING.inc.php";
 				// For logging, if required
 
 

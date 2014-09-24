@@ -9,11 +9,10 @@
 
 
 DEFINE("_db_host_","localhost");	/* = XAMPP default host,user,pw */
-DEFINE("_db_user_","root");
-DEFINE("_db_pw_","");
+DEFINE("_db_user_","rjb");
+DEFINE("_db_pw_","rjb");
 
 DEFINE("_db_name_","Linora");		/* Database name for this aplication */
-
 
 
     // Initialize_myDatabase does what it's header suggests - it takes a

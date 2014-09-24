@@ -1,4 +1,5 @@
-<?php	// LOGGING.INC.PHP	Include for responders that do any logging.
+<?php
+	// LOGGING.INC.PHP	Include for responders that do any logging.
 	// ===============	The constants _logging_ _LOG_SOURCE_ 
 	//			_log_filename_ should already have been
 	//  (C) C Lester 2013	DEFINEd. This include is best done as
