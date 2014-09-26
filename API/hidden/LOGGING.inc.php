@@ -1,26 +1,54 @@
+
 <?php
-	// LOGGING.INC.PHP	Include for responders that do any logging.
-	// ===============	The constants _logging_ _LOG_SOURCE_ 
-	//			_log_filename_ should already have been
-	//  (C) C Lester 2013	DEFINEd. This include is best done as
-	//			    if (_logging_) INCLUDE...
+// LOGGING.INC.PHP    Include for responders that do any logging.
+// ===============    The constants LOGGING _LOG_SOURCE_ 
+//            LOGFILE should already have been
+//  (C) C Lester 2013    DEFINEd. This include is best done as
+//                if (LOGGING) INCLUDE...
+
+function log_writer($obj) {
+    global $log;
+    if (LOGGING) {
+        fwrite(
+        	$log, 
+        	date("Y-m-d H:i:s  ") . json_encode( $obj ). "\r\n"
+        );
+    }
+}
+
+function log_($s, $type = "info") {
+    global $log;
+    if (LOGGING) {
+	    $obj = debug_backtrace(false);
+		$obj['type'] = $type;
+		log_writer( $obj );
+    }
+}
+
+function log_error($s) {
+    log_($s, "error");
+}
 
 
-    function log_($s)
-      { global $LOG;
-	if (_logging_)
-	    fwrite($LOG,date("Y-m-d H:i:s  ")._log_source_."  $s\r\n"); }
-
-    function log_error($s) { log_("ERROR: $s"); }
-    function log_warn($s)  { log_("WARNING: $s"); }
-
-    function log_close_($s)
-      { global $LOG;
-	if (!_logging_) return
-	log_("******** $s");
-        fclose($LOG); }
+function log_warn($s) {
+    log_($s, "warning");
+}
 
 
-    if (_logging_) $LOG = fopen(_log_filename_,"a");
-    
+function log_close_($s) {
+    global $log;
+
+    if (LOGGING) {
+        return log_($s, "close");
+	    if ($log) {
+		    fclose($log);
+	    }
+	}
+}
+
+
+if (LOGGING) {
+    $log = fopen(LOGFILE, "a");
+}
+
 ?>

@@ -7,19 +7,15 @@
 	// caption.  The table is sorted on  first the category,  then on the
 	// caption.
 
-
-
-    DEFINE ( "_debugging_",	FALSE );
-
-    DEFINE ( "_logging_",	TRUE );
-    DEFINE ( "_log_source_",	"GET LINK-TABLE" );
-	DEFINE ( "_log_filename_",	$_SERVER["DOCUMENT_ROOT"] . "/API/_API_.LOG" );
+    INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/inc/config.php";
 
     INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/API/hidden/(LINORA).inc.php";	// Linora-specific defines and function
     INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/API/hidden/(DB_EASY).inc.php";// Reusable mysqli-database utilities
-    if (_logging_) INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/API/hidden/LOGGING.inc.php";
-				// For logging, if required
 
+    if (LOGGING) {
+		// For logging, if required
+    	INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/API/hidden/LOGGING.inc.php";
+	}
 
 
     $DB = new DB_easy;

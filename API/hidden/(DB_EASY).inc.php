@@ -47,7 +47,7 @@ class DB_easy {
     /* *********** Opening and closing the database *********** */
 
     // new DB_easy() first connects to the MySQL engine with previously
-    // DEFINEd application constants _db_host_, _db_user_, and _db_pw_ as
+    // DEFINEd application constants DBHOST, DBUSER, and DBPW as
     // parameters, then opens the database whose name is given by an
     // application constant named _db_nbame_: if the database doesn't exist,
     // this constructor will create the database and initialize it using an
@@ -61,13 +61,13 @@ class DB_easy {
 
 
 		// CONNECT TO THE DATABASE SERVER
-	    $dsn = "mysql:"._db_host_.";charset=UTF-8";
+	    $dsn = "mysql:".DBHOST.";charset=UTF-8";
 		$option = array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION);
 		// Manana: maybe also PDO::ATTR_PERSISTENT=>TRUE ??
 
 		try {
 
-			$_DB = new PDO($dsn,_db_user_,_db_pw_,$option);
+			$_DB = new PDO($dsn,DBUSER,DBPW,$option);
 
 		} catch (PDOException $failure) {
 			echo  $failure;
@@ -80,16 +80,16 @@ class DB_easy {
 		}
 
 	// DOES THE DATABASE EXIST YET?
-	if (DB_easy::DB_exists($_DB,_db_name_))
+	if (DB_easy::DB_exists($_DB,DBNAME))
           //
 	  { // THE DATABASE EXISTS: SO MERELY SELECT IT.
-          $_DB->exec("USE "._db_name_); } //[Fixed params so no prepare().]
+          $_DB->exec("USE ".DBNAME); } //[Fixed params so no prepare().]
         else // ****** ??? wrap the following in a Transaction? ??? ******
           //
           { // THE DATABASE DOESN'T YET EXIST, SO CREATE IT...
-            DB_easy::Query("CREATE DATABASE "._db_name_,__file__,__line__);
+            DB_easy::Query("CREATE DATABASE ".DBNAME,__file__,__line__);
             // ... SELECT IT ...
-            $_DB->exec("USE "._db_name_); //
+            $_DB->exec("USE ".DBNAME); //
             // ... AND DO WHATEVER CREATES ETC THE APPLICATION NEEDS.
 	    Initialize_myDatabase($_DB,$this);
       }   }

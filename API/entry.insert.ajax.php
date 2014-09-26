@@ -9,17 +9,11 @@
 	// Returns only error messages, which means they will later need
 	// somewhere to appear in index.html.
 
-
-
-    DEFINE ( "_debugging_",	FALSE );
-
-    DEFINE ( "_logging_",	TRUE );
-    DEFINE ( "_log_source_",	"INSERT LINK-ENTRY" );
-    DEFINE ( "_log_filename_",	$_SERVER["DOCUMENT_ROOT"] . "/API/_API_.LOG" );
+    INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/inc/config.php";
 
     INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/API/hidden/(LINORA).inc.php";	// Linora-specific defines and function
     INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/API/hidden/(DB_EASY).inc.php";// Reusable mysqli-database utilities
-    if (_logging_) INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/API/hidden/LOGGING.inc.php";
+    if (LOGGING) INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/API/hidden/LOGGING.inc.php";
 				// For logging, if required
 
 
@@ -48,6 +42,8 @@
 	$DB->Close();
       }
 
-    log_close_("");
+      if (LOGGING) {
+	    log_close_("");
+      }
 
 ?>

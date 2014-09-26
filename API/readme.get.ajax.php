@@ -11,8 +11,6 @@
         if ($n<10000) return    " $n:  ";
 	return                   "$n:  "; }
 
-    DEFINE ('_debug_',FALSE);
-
     if (!isset($_GET['file']))
       { echo "<span style='color:red'><b>README.GET needs a parameter.</b></span>";
         exit; }
@@ -20,14 +18,14 @@
     $filename = $_GET['file'];
     $filename = '../'.$_GET['file'];
 
-    if (_debug_)
+    if (DEBUG)
 	echo "Raw filename is $filename<br>----------------===================<br><br>";
 
     $filename = str_replace('%20',' ',$filename);
     $filename = str_replace('%23','#',$filename);
     $filename = 'file:///'.getcwd().'/'.$filename;
 
-    if (_debug_)
+    if (DEBUG)
 	echo "Corrected filename is $filename<br>----------------------====================<br><br>";
 
     if (!file_exists($filename))
