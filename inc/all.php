@@ -1,14 +1,12 @@
 <?php
-    INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/inc/config.php";
+	$folder = $_SERVER["DOCUMENT_ROOT"] . "/inc";
 
-	// Linora-specific defines and function
-    INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/API/hidden/(LINORA).inc.php";	
+    INCLUDE "$folder/config.php";
+    INCLUDE "$folder/linora.php";
+    INCLUDE "$folder/db.php";
 
-	// Reusable mysqli-database utilities
-    INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/API/hidden/(DB_EASY).inc.php";
-
-	// For logging, if required
     if (LOGGING) {
-    	INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/API/hidden/LOGGING.inc.php";
+		// For logging, if required
+    	INCLUDE "$folder/log.php";
 	}
 ?>

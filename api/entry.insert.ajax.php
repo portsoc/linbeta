@@ -1,5 +1,5 @@
 <?php
-	/*	
+	/*
     Takes cat/url/cap  from $_REQUEST, and inserts  it into the database.
     If url=caption  is null,  then no entry is made.  Othwerwise, (1) if the  category   is  null,   it  is
 	defaulted to "?";  (2) null url is OK - it's a linkless entry into
@@ -9,7 +9,7 @@
 	 */
 
     INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/inc/all.php";
-    
+
     if (
     	count($_POST)==0 ||   // = a null call
     	($url=$_POST['url']).($cap=$_POST['cap']) == ""     	 // = a void entry
@@ -27,7 +27,7 @@
         $query = "SELECT * FROM entries WHERE cat=? AND url=? AND cap=?";
         $_duplics_ = $DB->PQuery($query,$binds,__file__,__line__);
         // If there are duplicates, don't insert the new entry
-        
+
         if ($_duplics_->rowCount() != 0) {
             log_("DUPLICATE");
         } else  {
@@ -40,7 +40,7 @@
         $DB->Close();
     }
 
-    
+
     if (LOGGING) {
         log_close_("");
     }
