@@ -1,12 +1,12 @@
+
 // (AJAX.POST).JS	(C) Kit Lester 2008. Minor tweaks 2013, 2014.
 // ==============
-			/* Utility in the klib library for simple AJAX calls
-			 * which POST content to an active web entity (e.g.a
-			 * php-written API element) over http. */
+/* Utility in the klib library for simple AJAX calls
+ * which POST content to an active web entity (e.g.a
+ * php-written API element) over http. */
+$asynch = true; // else synch
 
-$asynch = true;  // else synch
-
-logging = true;	// whether messaging console.log
+logging = true; // whether messaging console.log
 
 
 // ***************************************************
@@ -16,11 +16,9 @@ logging = true;	// whether messaging console.log
 
 // The  following 2 lines make sure that the klib library  object  exists, and
 // then that that the klib.ajax sublibrary object exists
-		
-if (!window.klib)	window.klib	  = {}	    // NB: {} is equivalent
-if (!window.klib.ajax)	window.klib.ajax  = {}	    // to "new Object()"
-
-
+// NB: {} is equivalent to "new Object()"
+if (!window.klib) window.klib = {}
+if (!window.klib.ajax) window.klib.ajax = {} 
 
 // KLIB.AJAX.CONSTRUCTOBJ() creates  a new Ajax  object by  calling  whatever
 // XMLHttpRequest constructor is supported by the browser being used.
@@ -30,13 +28,14 @@ if (!window.klib.ajax)	window.klib.ajax  = {}	    // to "new Object()"
 // file, so in  practice  if more than one are  loaded  they  share the single
 // last-loaded instance of it.
 
-klib.ajax.constructObj = function()
-  { if (window.XMLHttpRequest)
-	return new XMLHttpRequest();
+klib.ajax.constructObj = function() {
+    if (window.XMLHttpRequest)
+        return new XMLHttpRequest();
     if (window.ActiveXObject)
-	return new ActiveXObject("Microsoft.XMLHTTP");
+        return new ActiveXObject("Microsoft.XMLHTTP");
     if (logging) console.log("This browser does not support AJAX.");
-    return false;};
+    return false;
+};
 
 
 
@@ -74,29 +73,31 @@ klib.ajax.constructObj = function()
 // parameter. If the application has no need for such callback, then the third
 // parameter can be null.
 
-klib.ajax.post = function(URL, HTTPqueries, callback)
-  { // Make HTTPqueries safe for use as a POSTable query-set
-    HTTPqueries = ( !HTTPqueries
-		  ? null// in case there should be no POSTs
-		  : typeof HTTPqueries == "string"
-		  ? HTTPqueries // better not need URIencoding!
-		  : klib.string.URIQueriesOf(HTTPqueries) ) //must be obj
-    // Now set up the ajaxObj.
+klib.ajax.post = function(URL, HTTPqueries, callback) { // Make HTTPqueries safe for use as a POSTable query-set
+    HTTPqueries = (!HTTPqueries ? null // in case there should be no POSTs
+            : typeof HTTPqueries == "string" ? HTTPqueries // better not need URIencoding!
+            : klib.string.URIQueriesOf(HTTPqueries)) //must be obj
+        // Now set up the ajaxObj.
     var ajaxObj = klib.ajax.constructObj(); // One day: handle FALSE return
     ajaxObj.open("POST", URL, $asynch);
     ajaxObj.setRequestHeader("Content-type",
-			     "application/x-www-form-urlencoded");
+        "application/x-www-form-urlencoded");
     ajaxObj.onreadystatechange =
-		function(){ if ( callback )	// I.e. if call-back is needed.
-			      { if (logging) console.log("state "+ajaxObj.readyState+"/"+
-				    		     ajaxObj.status, ajaxObj);
-				if (ajaxObj.readyState == 4    // One day, handle bad
-				    && ajaxObj.status == 200)  // state/status pair.
-				      { if (logging) console.log("calling back from ajax.post");
-					callback(ajaxObj.responseText);
-					if (logging) console.log("called back from ajax.post"); }}}
-    // Now do the SEND.
-    if (logging) console.log("************ about to send to "+URL+" from ajax.post");
-    ajaxObj.send(HTTPqueries); 
+        function() {
+            if (callback) {
+                if (logging) console.log("state " + ajaxObj.readyState + "/" +
+                    ajaxObj.status, ajaxObj);
+                if (ajaxObj.readyState == 4 // One day, handle bad
+                    && ajaxObj.status == 200) // state/status pair.
+                {
+                    if (logging) console.log("calling back from ajax.post");
+                    callback(ajaxObj.responseText);
+                    if (logging) console.log("called back from ajax.post");
+                }
+            }
+        }
+        // Now do the SEND.
+    if (logging) console.log("************ about to send to " + URL + " from ajax.post");
+    ajaxObj.send(HTTPqueries);
     if (logging) console.log("************ send from ajax.post is complete");
-  };
+};

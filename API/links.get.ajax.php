@@ -1,22 +1,14 @@
-<?php	// API/LOAD.AJAX.PHP		// Returns  the  current contents  of
-	// =================		// the  Linora  database  as  a  two-
-	//				// column HTML table with
-	//   (c) C Lester 2013,2014	//	class="LinkTable"
-	//				// - the first column  is the caption
-	// of a  link,  the  second is an  <a¬href=...>  of the URL  and  the
-	// caption.  The table is sorted on  first the category,  then on the
-	// caption.
+<?php
+	/*
+	(c) C Lester 2013,2014
+	Returns  the  current contents of the Linora database as a 
+	two-column HTML table with class="LinkTable" the first column
+	is the caption of a link, the second is an  <a href=...> of 
+	the URL and the caption.  The table is sorted on first the 
+	category, then on the caption.
+	*/
 
-    INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/inc/config.php";
-
-    INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/API/hidden/(LINORA).inc.php";	// Linora-specific defines and function
-    INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/API/hidden/(DB_EASY).inc.php";// Reusable mysqli-database utilities
-
-    if (LOGGING) {
-		// For logging, if required
-    	INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/API/hidden/LOGGING.inc.php";
-	}
-
+    INCLUDE $_SERVER["DOCUMENT_ROOT"] . "/inc/all.php";
 
     $DB = new DB_easy;
     $_select_ = $DB->Query("SELECT * FROM entries ORDER BY cat,cap ASC",__file__,__line__);
@@ -46,7 +38,8 @@
 
     $DB->Close();
 
-    log_close_("");
-
+    if (LOGGING) {
+    	log_close_("");
+    }
 
 ?>
