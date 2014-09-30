@@ -3,46 +3,56 @@ CSS for Linora index.html
 (c) Kit Lester 2013
  */
 
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
 body {
-    background-color: #ddddff;
+    background-color: #ddf;
     font-family: Calibri, sans-serif;
 }
-fieldset {
-    border-radius: 1ex;
-    width: 97%;
+
+header {
+	overflow: hidden;
+	display: flex;
 }
-fieldset legend {
-    border-radius: 0.5ex;
-    background: #bbbbff;
+
+header * {
+	font-size: 125%;
 }
-div.header {
-    position: fixed;
-    text-align: center;
-    width: 24pc;
-    background: #bbbbff;
+
+header label {
+	padding: 2ex;
+	flex: 1;
+	text-align: center;
 }
-div.title {
-    float: left;
+
+header>input[type=radio]:checked + label {
+	background: #ddf;
 }
-div.shows {} div.clear {
-    clear: both;
+
+header>input[type=radio] + label {
+	background: #fff;
 }
-table.LinkTable {
-    width: 100%;
-    border: none;
-    padding: 0;
+
+header input[type=radio] {
+	display: none;
 }
-table.LinkTable td {
-    border: none;
-    padding: 1ex;
+
+
+.content_container {
+	width: 100%;
 }
-table.LinkTable tr:nth-child(odd) td {
-    border: none;
-    padding: 1ex;
-    background-color: #e8e8ff;
+
+.panel {
+	margin: 1em;
+	position: relative;
 }
-table.LinkTable tr:nth-child(even) td {
-    border: none;
-    padding: 1ex;
-    background-color: #d3d3ff;
+
+.stealth {
+	overflow: hidden;
+	visibility: hidden;
+	display: none;
 }

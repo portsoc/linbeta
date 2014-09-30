@@ -1,68 +1,52 @@
 <!doctype html>
+<html>
+	<head>
+		<title>LinOrA - Link Organizer and Archiver</title>
+		<meta charset="UTF8" />
 
-<title>LinOrA - Link Organizer and Archiver</title>
+		<meta name="description" content="LinOrA - an Organizer and Archiver for Web-links"/>
+		<meta name="author" content="Kit Lester, Rich Boakes"/>
+		<meta name="keywords" content="Web-link, Organizer, Archiver, uri, bookmarks"/>
 
-<meta name="description" content="LinOrA - an Organizer and Archiver for Web-links"/>
-<meta name="author" content="Kit Lester"/>
-<meta name="author" content="Rich Boakes"/>
-<meta name="keywords" content="Web-link, Organizer, Archiver, uri, bookmarks"/>
-<meta charset=UTF-8 />
+		<link rel="icon" href="favicon.ico"/>
+		<link type="text/css" rel="stylesheet" href="lib/linora.css">
 
-<link rel="shortcut icon" href="favicon.ico"/>
-<link type="text/css" rel="stylesheet" href="LIB/linora.css" media="all">
+		<script src="lib/xhr2.js"></script>
+		<script src="lib/linora.js"></script>
+	</head>
 
-<script src="LIB/uriencodes.js"></script>
-<script src="LIB/ajax.get.js"></script>
-<script src="LIB/ajax.post.js"></script>
-<script src="LIB/linora.js"></script>
+	<body>
+		<form id="postage" name="postage" ></form>
+		<form id="pageselect" name="pageselect" ></form>
 
+		<header>
+			<input form="pageselect" type="radio" name="top" id="links.flip" checked><label for="links.flip">links</label>
+			<input form="pageselect" type="radio" name="top" id="add.flip"><label for="add.flip">add</label>
+			<input form="pageselect" type="radio" name="top" id="help.flip"><label for="help.flip">help</label>
+		</header>
 
-<div class="header">
-    <div class="title"><big>&nbsp;<big><big><b>Linora</b>&nbsp;&nbsp;&nbsp;&nbsp;
-			</big></big></big></div>
-    <div class="shows">Show&hellip;&nbsp;
-	    <input type="checkbox" id="helpflip"/>help&nbsp;
-	    <input type="checkbox" id="addflip"/>add&nbsp;
-	    <input type="checkbox" id="linksflip"/>links
-    </div>
-</div>
+		<div class="content_container">
 
+			<div id="add" class="panel stealth">
+				<h1>Add a link</h1>
+					
+				<div class="form">
+					<button form ="postage" id="postagebut" value="Add">Add</button>
+					<label>URL <input name="url" id="postageurl" type="text" maxlength="200"></label>
+					<label>Caption <input name="cap" id="postagecap" type="text" maxlength="300"></label>
+					<label>Category <input name="cat" id="postagecat" type="text" maxlength="100"></label>
+					<input name="xid" id="postageid" type="hidden">
+				</div>
+			</div>
 
-<div class="hack"><p>&nbsp;<br>&nbsp;</p><div>
+			<div id="links" class="panel stealth">
+				<p>Links</p>
+			</div>
 
-<fieldset id="add" style="display:none">
-    <legend><b>Link to be added</b></legend>
+			<div id="help" class="panel stealth">
+				<p>Help</p>
+			</div>
 
-    <div id="badInsertDiv" style="color:red"></div>
-
-    <form id="postage">
-	<table cellspacing="2">
-	<tr><td>Category:&nbsp;
-	    <td><input name="cat" type="text"
-				  size="40" maxlength="100" />
-		</td></tr>
-    	<tr><td>URL:&nbsp;
-	    <td><input name="url" type="text"
-				  size="40" maxlength="200" />
-		</td></tr>
-    	<tr><td>Caption:&nbsp;
-	    <td><input name="cap" type="text"
-				  size="40" maxlength="300" />
-		</td></tr>
-	<tr><td><input type="submit" value="Add"></td></tr>
-
-    	</table>
-    </form>
-</fieldset>
-
-
-<fieldset id="links" style="display:none">
-    <legend><b>Archived Links</b></legend>
-    <div id="linksDiv"></div>
-</fieldset>
-
-<fieldset id="help" style="display:none">
-    <legend><b>Help etc.</b></legend>
-	<div id="helpDiv"></div>
-</fieldset>
-
+		</div>
+	</body>
+</html>
