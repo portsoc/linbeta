@@ -121,6 +121,18 @@
 
         }
 
+        function query_to_array($query) {
+            global $_DB;
+            $selectresult = $_DB->query($query);
+            $selectresult->setFetchMode(PDO::FETCH_ASSOC);
+            
+            while ($row=$selectresult->fetch())  {
+				$rows[] = $row;
+            }
+			return $rows;
+		}
+
+
 		/*
         PQuery PREPAREs the SQL query given by $sql on this object's database
         connection, and EXECUTEs the prepared statements with the given array

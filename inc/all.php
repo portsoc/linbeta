@@ -4,6 +4,7 @@
     INCLUDE "$folder/config.php";
     INCLUDE "$folder/linora.php";
     INCLUDE "$folder/db.php";
+    INCLUDE "$folder/io.php";
 
     if (LOGGING) {
 		// For logging, if required

@@ -1,4 +1,3 @@
-
 <?php
 	/*
 	Include for responders that do any logging.

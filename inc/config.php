@@ -9,4 +9,6 @@ DEFINE( "DBUSER", "rjb" );			// DB user with
 DEFINE( "DBPW", "rjb" );			// Password for DB user
 DEFINE( "DBNAME", "Linora" );		// DB name for the app
 
+DEFINE( "FORCE_JSON", TRUE );
+
 ?>
