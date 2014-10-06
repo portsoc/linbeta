@@ -29,12 +29,17 @@ header label {
 	text-align: center;
 }
 
+
 header>input[type=radio]:checked + label {
 	background: #ddf;
 }
 
 header>input[type=radio] + label {
 	background: #fff;
+}
+
+header>input[type=radio] + label:hover {
+	background: #3F9;
 }
 
 header input[type=radio] {
@@ -56,3 +61,39 @@ header input[type=radio] {
 	visibility: hidden;
 	display: none;
 }
+
+
+.feedback {
+	background: #777;
+	background: rgba(0,0,0,0.5);
+	color: #3F9;
+	padding: 0;
+	overflow: hidden;
+	border-radius: 0.5ex;
+	margin: 1em;
+}
+
+.feedback:hover {
+	box-shadow: 0 0 1em #555;
+	background: #3F9;
+	color: #555;
+	cursor: pointer;
+}
+
+.feedback>p {
+	transition: max-height 0.5s, padding 0.5s, opacity 0.5s;
+	padding: 0.5ex 1ex;
+	max-height: 4ex;
+	opacity: 1;
+}
+
+.feedback>p.fedback {
+	padding-top: 0;
+	padding-bottom: 0;
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    box-shadow: 0 0 0 rgba(0,0,0,0);
+}
+
