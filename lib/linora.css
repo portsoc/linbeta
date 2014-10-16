@@ -21,6 +21,7 @@ header {
 
 header * {
 	font-size: 125%;
+    cursor: pointer;
 }
 
 header label {
@@ -41,6 +42,11 @@ header>input[type=radio] + label {
 header>input[type=radio] + label:hover {
 	background: #3F9;
 }
+
+header>input[type=radio]:checked:hover+ label {
+    background: #ddf;
+}
+
 
 header input[type=radio] {
 	display: none;
@@ -81,9 +87,9 @@ header input[type=radio] {
 }
 
 .feedback>p {
-	transition: max-height 0.5s, padding 0.5s, opacity 0.5s;
+	transition: max-height 0.5s, padding 0.5s, opacity 0.25s;
 	padding: 0.5ex 1ex;
-	max-height: 4ex;
+	max-height: 10ex;
 	opacity: 1;
 }
 
@@ -97,3 +103,110 @@ header input[type=radio] {
     box-shadow: 0 0 0 rgba(0,0,0,0);
 }
 
+
+#postagebut {
+	position: absolute;
+	right: 0%;
+	width: 20%;
+	height: 10em;
+}
+
+
+.links {
+	width: 100%;
+	padding: 0;
+}
+
+.links li {
+	clear: both;
+	border: none;
+	padding: 0.5ex;
+	list-style-type: none;
+	overflow: hidden;
+	max-height: 4em;
+	transition: opacity 0.5s ease-in-out 0.5s, padding 0.5s ease-in-out, max-height 0.5s ease-in-out;
+}
+
+
+.links li.switchingoff {
+	transition: opacity 0.5s ease-in-out, padding 0.5s ease-in-out 0.5s, max-height 0.5s ease-in-out 0.5s;
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+
+.links li:nth-child(odd) {
+	background: rgba(255,255,255,0.2); ;
+}
+
+
+.panel {
+	margin: 1em;
+	position: relative;
+}
+
+.panel label {
+    display: block;
+    min-height: 2em;
+    margin: 0.5em;
+    width: 100%;
+	text-align: middle;
+}
+.panel input {
+    left: 15%;
+    margin: 0;
+    min-height: 2em;
+    position: absolute;
+    right: 5em;
+    width: 60%;
+}
+
+
+.tag, .edit {
+	color: #000;
+	border: solid rgba(0,0,0,0.5) thin;
+	border-radius: 0.5ex;
+	padding: 0.25ex 1ex;
+	margin-right: 0.5ex;
+	display: inline-block;
+}
+
+.tag {
+		background: rgba(255,255,255,0.5);
+}
+
+.tags {
+	font-size: 80%;
+	float: right;
+	max-width: 75%;
+	display: inline-block;
+	text-align: right;
+}
+
+
+.edit {
+	background: rgba(255,204,204,0.8);
+}
+
+
+.edit:hover {
+	background: rgba(255,180,180,1);
+}
+
+
+.title, .tags {
+	transition: all 0.5s ease-in-out;
+}
+
+
+@media all and (max-width: 20em) {
+	.title, .tags {
+		opacity: 0;
+	}
+}
+
+.closable:before {
+	content: '✖ ';
+}
