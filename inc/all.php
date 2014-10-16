@@ -2,7 +2,6 @@
 	$folder = $_SERVER["DOCUMENT_ROOT"] . "/inc";
 
     INCLUDE "$folder/config.php";
-    INCLUDE "$folder/linora.php";
     INCLUDE "$folder/db.php";
     INCLUDE "$folder/io.php";
 
