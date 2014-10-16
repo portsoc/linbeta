@@ -1,207 +1,122 @@
 <?php
 
-	/*
-	Re-usable database utilities in PDO
-	(c) C Lester 2013 (mysqli), 2014 (PDO)
-	*/
+/**
+ * Class DBException
+ */
+class DBException extends Exception { }
 
-    class DB_easy {
+/*
+Re-usable database utilities in PDO
+(c) C Lester 2013 (mysqli), 2014 (PDO)
+*/
 
-        private $_DB;
+class DB {
 
-        /*
-		Refers to the underlying PDO object
-		DB_exists returns TRUE if the connection given by $dbhost has
-		a database named $dbname. This method could reasonably be public.
-		NB: SHOW DATABASES LIKE isn't Standard SQL - it's one of
-		MySQL's naughty "extras".
-        */
-        private function DB_exists($dbhost,$dbname)      {
-            $showquery = "show databases like '$dbname'";
-            $showresult = $dbhost->query($showquery);
-            return (boolean) ($showresult->fetch());
+    private $pdo;
+
+    /*
+     * @param $dbname The name of the database to look for.
+     * @return boolean is true of the connection of this object contains a database like the one named.
+     * @todo Find an alternative to "SHOW DATABASES LIKE" which isn't Standard SQL - it's one of MySQL's naughty "extras" see also http://stackoverflow.com/questions/15177652/pdo-check-if-database-exists
+    */
+    private function dbExists($dbname) {
+        $showquery = "show databases like '$dbname'";
+        $showresult = $this->pdo->query($showquery);
+        return (boolean)($showresult->fetch());
+    }
+
+
+    /**
+     * @param msg $
+     * @throws DBException
+     */
+    private function throwException($msg = "Unknown DB Error") {
+        throw new DBException(
+            $msg . " " .
+            $this->pdo->getCode()." ".
+            $this->pdo->getInfo()." ".
+            $this->pdo->errorInfo()[1]." ".
+            $this->pdo->errorInfo()[2]
+        );
+    }
+
+    /**
+     * Constructor that connects connects to a MySQL engine
+     * using application constants DBHOST, DBUSER, and DBPW
+     * (which are defined in inc/config.php).
+     *
+     * If the database doesn't exist, it is created and
+     * initialised it using an
+    application function with spec
+            Initialize_myDatabase($DB,$EZ)
+    where $DB refers to the current connection object, and $EZ refers to
+    this instance of DR_easy.
+    */
+    public function __construct() {
+
+        // CONNECT TO THE DATABASE SERVER
+        $dsn = "mysql:" . DBHOST . ";charset=UTF-8";
+        $option = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
+        // Manana: maybe also PDO::ATTR_PERSISTENT=>TRUE ??
+        try {
+            $this->pdo = new PDO($dsn, DBUSER, DBPW, $option);
+        } catch (PDOException $failure) {
+            DB::throwException("Connect failed during construct");
         }
 
+        // DOES THE DATABASE EXIST YET?
 
-		/*
-		i.e., return TRUE is there's a row, FALSE if there are no rows.
-		****** Validator functions for quick tidy death when needed. ****** 
-		Failure exits, saying $bad failed, with the usual error number and
-		message from the $db object.
-		*/
-        private function Failure($db,$bad,$file,$line)      {
-            echo "<br/><br/><b>Crash:</b> ".     "&ldquo;$bad&rdquo; failed at line $line of $file - the MySQL ".     "error is <i>".$db->errorInfo()[1]." ".$db->errorInfo()[2]."</i>";
-            exit;
-        }
+        if (DB::dbExists(DBNAME)) {
+            // THE DATABASE EXISTS: SO MERELY SELECT IT.
+            $this->pdo->exec("USE " . DBNAME);
+        } else {
+            // ****** ??? wrap the following in a Transaction? ??? ******
+            // THE DATABASE DOESN'T YET EXIST, SO CREATE IT...
+            DB::Query("CREATE DATABASE " . DBNAME, __file__, __line__);
 
-        private function Query_and_Validate($db,$sql,$file,$line)      {
-            $result = $db->query($sql);
-            
-            if (!$result) DB_easy::Failure($db,$sql,$file,$line);
-            return $result;
-        }
+            // ... SELECT IT ...
+            $this->pdo->exec("USE " . DBNAME);
 
-        /*
-        new DB_easy() first connects to the MySQL engine with previously
-        DEFINEd application constants DBHOST, DBUSER, and DBPW as
-        parameters, then opens the database whose name is given by an
-        application constant named _db_nbame_: if the database doesn't exist,
-        this constructor will create the database and initialize it using an
-        application function with spec
-        		Initialize_myDatabase($DB,$EZ)
-        where $DB refers to the current connection object, and $EZ refers to
-        this instance of DR_easy.
-		*/
-        public function __construct() {
-            global $_DB;
-            // CONNECT TO THE DATABASE SERVER
-            $dsn = "mysql:".DBHOST.";charset=UTF-8";
-            $option = array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION);
-            // Manana: maybe also PDO::ATTR_PERSISTENT=>TRUE ??
-			try {
-                $_DB = new PDO($dsn,DBUSER,DBPW,$option);
-            }
-
-            catch (PDOException $failure) {
-                echo  $failure;
-                // DB_easy::Failure("CONNECT failed - ".
-				// 	$_DB->getCode()." ".
-                //	$_DB->getInfo()," ".
-				// 	$file,
-				// 	$line
-				// );
-            }
-
-            // DOES THE DATABASE EXIST YET?
-            
-            if (DB_easy::DB_exists($_DB,DBNAME)) {
-                // THE DATABASE EXISTS: SO MERELY SELECT IT.
-                $_DB->exec("USE ".DBNAME);
-            } else {
-				// ****** ??? wrap the following in a Transaction? ??? ******
-                // THE DATABASE DOESN'T YET EXIST, SO CREATE IT...
-                DB_easy::Query("CREATE DATABASE ".DBNAME,__file__,__line__);
-
-                // ... SELECT IT ...
-                $_DB->exec("USE ".DBNAME);
-
-				// ... AND DO WHATEVER CREATES ETC THE APPLICATION NEEDS.
-                Initialize_myDatabase($_DB,$this);
-            }
-
-        }
-
-        // Close() closes the connection establisged by the above constructor.
-        public function Close()      {
-            global $_DB;
-            $_DB = null;
-        }
-
-        /*
-        Query does (without preparation) the SQL query given by $sql on this
-        object's database connection, returning a reference to the resulting
-        PDOStatement. DIEs if the query fails, giving a message including $sql,
-        $file, and $line.
-        Most likely, Query will be called by GET reponders, and PQuery by POST responders.
-        */
-        public function Query($sql,$file,$line)      {
-        	/*
-			...which in PDO MIGHT garbage collect the connection object, 
-        	thereby closing the connection ... unless I start using the "persitent" option.
-   			*/
-            global $_DB;
-            try {
-                $result = $_DB->query($sql);
-                return $result;
-            }
-
-            catch (PDOException $failure ){
-                DB_easy::Failure($_DB,$sql,$file,$line);
-            }
-
-        }
-
-        function query_to_array($query) {
-            global $_DB;
-            $selectresult = $_DB->query($query);
-            $selectresult->setFetchMode(PDO::FETCH_ASSOC);
-            
-            while ($row=$selectresult->fetch())  {
-				$rows[] = $row;
-            }
-			return $rows;
-		}
-
-
-		/*
-        PQuery PREPAREs the SQL query given by $sql on this object's database
-        connection, and EXECUTEs the prepared statements with the given array
-        of bindings: if $sql has named placeholders (i.e. of format :name //
-        rather than ?), then the bindings array should be associative. Returns a
-        ereference to the PREPAREd-and-EXECUTEd PDOStatement. DIEs if the query
-        fails, giving a message including $sql, $file, and $line.
-        */
-        public function PQuery($sql,$bindings,$file,$line)      {
-            global $_DB;
-            try {
-                $prepared = $_DB->prepare($sql);
-                $prepared->execute($bindings);
-                return $prepared;
-            }
-
-            catch (PDOException $failure ){
-                DB_easy::Failure($_DB,$sql,$file,$line);
-            }
-
-        }
-
-        /* 
-        Three ECHO functions to display a table. Each takes
-        one parameter, which should be the result of an SQL
-        query that successfully returned a table.
-        */
-        public function Echo_associative($®)      {
-            // $®->data_seek(0);	// in case this wasn't the first use of $®...
-            echo "<br/>\r\n";
-            $®->setFetchMode(PDO::FETCH_ASSOC);
-            while ($row = $®->fetch())  {
-                foreach ($row as $cellname => $cell)echo "$cellname = $cell &nbsp; ";
-                echo "<br/>\r\n";
-            }
-
-        }
-
-        public function Echo_tabulate($®)      {
-            // $®->data_seek(0);	// in case this wasn't the first use of $®...
-            $selectquery = "SELECT * FROM MyTable";
-            $selectresult = ($dbhost->query($selectquery));
-            $selectresult->setFetchMode(PDO::FETCH_ASSOC);
-            echo "\r\n\n<p>Fetching as table:";
-            
-            if ($selectresult->rowCount() == 0)          {
-                echo "\r\n<br>Empty table";
-                return;
-            }
-
-            echo "\r\n<p><table border=1 cellspacing=0 cellpadding=2>";
-            $needheads=true;
-            while ($row=$selectresult->fetch())  {
-                
-                if ($needheads)      {
-                    echo "\r\n<tr>";
-                    foreach ($row as $index => $value) echo "<td>$index</td>";
-                    echo "</tr>";
-                    $needheads=false;
-                }
-
-                echo "\r\n<tr>";
-                foreach ($row as $index => $value) echo "<td>$value</td>";
-                echo "\r\n<tr>";
-            }
-
-            echo "\r\n</table>";
+            // ... AND DO WHATEVER CREATES ETC THE APPLICATION NEEDS.
+            DB::Query(DBINIT);
         }
 
     }
+
+    // Close() closes the connection established by the above constructor.
+    public function Close() {
+        $this->pdo = null;
+    }
+
+    /**
+     * @param $query The query to be executed.
+     * @param $bindings The data values to bind if the query is to be run as a prepared statement.
+     * @return array of associative arrays where each array represents a result row
+     * @throws DBException if the query fails for any technical reason
+     */
+    function query($query, $bindings = NULL) {
+
+        try {
+            if (isset($bindings)) {
+                $result =$this->pdo->prepare($query);
+                $result->execute($bindings);
+            } else {
+                $result =$this->pdo->query($query);
+            }
+
+            return $result->fetchAll();
+
+        } catch (PDOException $e) {
+            echo "DB Error: " . $e->getMessage();
+            echo "DB Error: " . $query;
+            print_r($bindings);
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+
+    }
+
+
+}
 
 ?>

@@ -8,15 +8,22 @@ include $_SERVER["DOCUMENT_ROOT"] . "/inc/all.php";
 
 $in = extract_vars();
 
-$DB = new DB_easy;
+try {
+    $DB = new DB();
 
-if (isset($in["filter"])) {
-	$f = $in["filter"];
-	$q = "SELECT * from entries where (cat like '%${f}%' or cap like '%${f}%') order by id desc;";
-	$rows = $DB->query_to_array($q);
-} else {
-	$rows = $DB->query_to_array("SELECT * FROM entries ORDER BY cat,cap ASC");
+    if (isset($in["filter"])) {
+        $f = $in["filter"];
+        $q = "SELECT * from entries where (cat like '%${f}%' or cap like '%${f}%') order by id desc;";
+        $rows = $DB->query($q);
+    } else {
+        $rows = $DB->query("SELECT * FROM entries ORDER BY cat,cap ASC");
+    }
+} catch (DBException $dbx) {
+    echo $dbx;
+    exit;
 }
+
+
 
 send_results($rows);
 ?>
