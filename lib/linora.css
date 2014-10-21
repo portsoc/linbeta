@@ -98,15 +98,13 @@ header input[type=radio] {
 	padding-bottom: 0;
     opacity: 0;
     max-height: 0;
-    padding-top: 0;
-    padding-bottom: 0;
     box-shadow: 0 0 0 rgba(0,0,0,0);
 }
 
 
 #postagebut {
 	position: absolute;
-	right: 0%;
+	right: 0;
 	width: 20%;
 	height: 10em;
 }
@@ -152,7 +150,7 @@ header input[type=radio] {
     min-height: 2em;
     margin: 0.5em;
     width: 100%;
-	text-align: middle;
+    vertical-align: middle;
 }
 .panel input {
     left: 15%;
