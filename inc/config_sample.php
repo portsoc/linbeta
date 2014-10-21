@@ -11,7 +11,6 @@ DEFINE( "DBPW",         "changeme"  );	// Password for DB user
 
 /* Debugging */
 DEFINE( "DEBUG",        FALSE       );  // a high level debug switch for application debugging
-DEFINE( "FORCE_JSON",   FALSE       );  // when true http content negotiation is ignored and JSON is always used
 
 /* Logging */
 DEFINE( "LOGGING",      FALSE       );  // Turn logging on or off

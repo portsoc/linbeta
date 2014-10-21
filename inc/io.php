@@ -7,13 +7,11 @@
  * @author Rich Boakes
  */
 
-include_once "config.php";
-
 $debug = array();
 
-function debug($name, $value) {
+function debug($value) {
 	global $debug;
-	$debug[$name] = $value;
+	$debug[] = $value;
 }
 
 function sanitize($what, $how, $method = INPUT_GET) {
@@ -37,8 +35,9 @@ function extract_vars($method = INPUT_GET) {
 
 function send_results($rows = array(), $meta = array(true)) {
 	global $debug, $_REQUEST;
+
  	// Check for presence of "application/json" in the accept header
-	$json = FORCE_JSON || !(stripos($_SERVER['HTTP_ACCEPT'], 'application/json') === FALSE);
+	$json = !(stripos($_SERVER['HTTP_ACCEPT'], 'application/json') === FALSE);
 	if ($json) {
 		header("Content-Type: application/json");
 		$rows = json_encode($rows);

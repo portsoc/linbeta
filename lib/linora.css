@@ -89,7 +89,7 @@ header input[type=radio] {
 .feedback>p {
 	transition: max-height 0.5s, padding 0.5s, opacity 0.25s;
 	padding: 0.5ex 1ex;
-	max-height: 10ex;
+	max-height: 25ex;
 	opacity: 1;
 }
 
