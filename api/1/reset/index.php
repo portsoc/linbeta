@@ -1,5 +1,5 @@
 <?php
-include $_SERVER["DOCUMENT_ROOT"] . "/inc/all.php";
+include $_SERVER["DOCUMENT_ROOT"] . "/linbeta/inc/all.php";
 
 $DB = new DB;
 $q = "drop database " . DBNAME;
