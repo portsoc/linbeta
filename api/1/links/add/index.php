@@ -9,8 +9,6 @@ include __DIR__.'/../../../../inc/all.php';
  * Extract all variables necessary for processing the request.
  */
 function insert_record($in) {
-	debug("inserting", $in);
-
 	$meta = array( "ok" => true );
 
     // open the DB
@@ -18,12 +16,14 @@ function insert_record($in) {
     $binds = null;
 
 	// is this an add or an update?
-	if ($in["xid"] && trim($in["xid"]).length > 0) {
-        $meta["msg"] = "Update " . $in["xid"].".";
+	if ($in["xid"] && strlen(trim($in["xid"])) > 0) {
+        $action = 'Update';
+        $meta["msg"] = "{$action} {$in['xid']}.";
         $binds = array($in["url"],$in["cap"],$in["cat"],$in["xid"]);
         $query = "UPDATE entries SET url=?, cap=?, cat=? WHERE id=?";
 	} else {
-        $meta["msg"] = "Insert.";
+        $action = 'Insert';
+        $meta["msg"] = "{$action}.";
         $binds = array($in["url"],$in["cap"],$in["cat"]);
 		$query = "INSERT INTO entries (url, cap, cat) VALUES (?,?,?);";
 	}
@@ -32,6 +32,11 @@ function insert_record($in) {
     $rows = $DB->query($query, $binds);
 
 	// TODO check if the update really worked and feedback to $meta properly
+
+    if($rows > 0)
+        debug("{$action} successful.");
+    else
+        debug("{$action} failed.");
 
 	// read the record back from the database
 	$rows = array();
