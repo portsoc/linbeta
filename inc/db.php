@@ -104,7 +104,10 @@ class DB {
                 $result =$this->pdo->query($query);
             }
 
-            return $result->fetchAll();
+            if(strpos($query, 'SELECT') !== false)
+                return $result->fetchAll();
+
+            return $result->rowCount();
 
         } catch (PDOException $e) {
             echo "DB Error: " . $e->getMessage();
