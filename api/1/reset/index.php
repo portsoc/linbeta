@@ -6,7 +6,7 @@ $DB = new DB;
 $q = "drop database " . DBNAME;
 echo "<p>$q</p>";
 
-$rows = $DB->query_to_array($q);
+$rows = $DB->query($q);
 
 sendResults($rows);
 
