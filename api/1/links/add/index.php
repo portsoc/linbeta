@@ -36,7 +36,7 @@ function insert_record($in) {
 	// read the record back from the database
 	$rows = array();
 	$query = "SELECT * FROM entries WHERE id=" .$DB->lastInsertId().";";
-    $rows = $DB->query_to_array($query);
+    $rows = $DB->query($query);
 
     $DB->close();
 
