@@ -72,7 +72,7 @@ class DB {
         } else {
             // ****** ??? wrap the following in a Transaction? ??? ******
             // THE DATABASE DOESN'T YET EXIST, SO CREATE IT...
-            DB::Query("CREATE DATABASE " . DBNAME, __file__, __line__);
+            DB::Query("CREATE DATABASE " . DBNAME);
 
             // ... SELECT IT ...
             $this->pdo->exec("USE " . DBNAME);
