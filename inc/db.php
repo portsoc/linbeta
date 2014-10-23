@@ -100,7 +100,7 @@ class DB
      * @return array of associative arrays where each array represents a result row
      * @throws DBException if the query fails for any technical reason
      */
-    function query($query, $bindings = null)
+    public function query($query, $bindings = null)
     {
 
         try {
