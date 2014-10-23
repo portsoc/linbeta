@@ -8,7 +8,7 @@
             contents of the <code>config_sample.php</code>
             file into a new <code>config.php</code> file and fill in the database
             details, or Linora can't store and retrieve your links.");
-        send_results();
+        sendResults();
         exit(-1);
     }
 

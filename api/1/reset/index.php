@@ -8,7 +8,7 @@ echo "<p>$q</p>";
 
 $rows = $DB->query_to_array($q);
 
-send_results($rows);
+sendResults($rows);
 
 echo "<p>ok DB wiped.</p>";
 ?>

@@ -22,7 +22,7 @@ function sanitize($what, $how, $method = INPUT_GET) {
 /*
  Extract all variables necessary for processing the request.
  */
-function extract_vars($method = INPUT_GET) {
+function extractVars($method = INPUT_GET) {
 
 	$out = array();
 	foreach ($_REQUEST as $key => $value) {
@@ -33,7 +33,7 @@ function extract_vars($method = INPUT_GET) {
 }
 
 
-function send_results($rows = array(), $meta = array(true)) {
+function sendResults($rows = array(), $meta = array(true)) {
 	global $debug, $_REQUEST;
 
  	// Check for presence of "application/json" in the accept header
@@ -52,7 +52,7 @@ function send_results($rows = array(), $meta = array(true)) {
 }
 
 
-function check_vars_present($in,$keys) {
+function checkVarsPresent($in,$keys) {
 	foreach( $keys as $k) {
 		if ( !isset($in[$k]) ) {
 			return false;

@@ -7,7 +7,7 @@ first the category, then on the caption.
 
 include __DIR__.'/../../../inc/all.php';
 
-$in = extract_vars();
+$in = extractVars();
 
 try {
     $DB = new DB();
@@ -26,5 +26,5 @@ try {
 
 
 
-send_results($rows);
+sendResults($rows);
 ?>

@@ -8,7 +8,7 @@ include __DIR__.'/../../../../inc/all.php';
 /**
  * Extract all variables necessary for processing the request.
  */
-function insert_record($in) {
+function insertRecord($in) {
 	$meta = array( "ok" => true );
 
     // open the DB
@@ -50,12 +50,12 @@ function insert_record($in) {
 
 // establish whether the required variables are all present
 $precondition = array("url", "cap", "cat");
-$in = extract_vars(INPUT_POST);
-$required_vars_are_present = check_vars_present($in, $precondition);
+$in = extractVars(INPUT_POST);
+$required_vars_are_present = checkVarsPresent($in, $precondition);
 
 if ($required_vars_are_present) {
-	$results = insert_record($in);
-	send_results(
+	$results = insertRecord($in);
+	sendResults(
 		$results['rows'],
 		$results['meta']
 	); // TODO internationalise?

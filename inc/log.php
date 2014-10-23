@@ -6,7 +6,7 @@
 	if (LOGGING) INCLUDE...
 	*/
 
-	function log_writer($obj) {
+	function logWriter($obj) {
 	    global $log;
 	    if (LOGGING) {
 	        fwrite(
@@ -16,30 +16,30 @@
 	    }
 	}
 
-	function log_($s, $type = "info") {
+	function log($s, $type = "info") {
 	    global $log;
 	    if (LOGGING) {
 		    $obj = debug_backtrace(false);
 			$obj['type'] = $type;
-			log_writer( $obj );
+			logWriter( $obj );
 	    }
 	}
 
-	function log_error($s) {
-	    log_($s, "error");
+	function logError($s) {
+	    log($s, "error");
 	}
 
 
-	function log_warn($s) {
-	    log_($s, "warning");
+	function logWarn($s) {
+	    log($s, "warning");
 	}
 
 
-	function log_close_($s) {
+	function logClose($s) {
 	    global $log;
 
 	    if (LOGGING) {
-	        return log_($s, "close");
+	        return log($s, "close");
 		    if ($log) {
 			    fclose($log);
 		    }
