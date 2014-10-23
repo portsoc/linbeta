@@ -1,5 +1,5 @@
 <?php
-	$folder = $_SERVER["DOCUMENT_ROOT"] . "/inc";
+	$folder = $_SERVER["DOCUMENT_ROOT"] . "/linbeta/inc";
 
     INCLUDE "$folder/io.php";
 
