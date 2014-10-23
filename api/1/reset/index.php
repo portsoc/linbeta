@@ -11,4 +11,3 @@ $rows = $DB->query($q);
 sendResults($rows);
 
 echo "<p>ok DB wiped.</p>";
-?>

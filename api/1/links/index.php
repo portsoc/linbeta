@@ -24,7 +24,4 @@ try {
     exit;
 }
 
-
-
 sendResults($rows);
-?>

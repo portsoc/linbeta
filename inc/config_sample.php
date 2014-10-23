@@ -4,20 +4,17 @@
  */
 
 /* Database */
-DEFINE( "DBHOST",       "127.0.0.1" );	// Hostname of IP address of the SQL DB server
-DEFINE( "DBNAME",       "linora"    );	// Name of the database to use
-DEFINE( "DBUSER",       "changeme"  );	// User with read/write DB permission
-DEFINE( "DBPW",         "changeme"  );	// Password for DB user
+const DBHOST = '127.0.0.1'; // Hostname of IP address of the SQL DB server
+const DBNAME = 'linora';    // Name of the database to use
+const DBUSER = 'changeme';  // User with read/write DB permission
+const DBPW = 'changeme';    // Password for DB user
 
 /* Debugging */
-DEFINE( "DEBUG",        FALSE       );  // a high level debug switch for application debugging
+const DEBUG = false;        // a high level debug switch for application debugging
 
 /* Logging */
-DEFINE( "LOGGING",      FALSE       );  // Turn logging on or off
-DEFINE( "LOGFILE",                      // location of the log file
-    __DIR__ .
-    "/log/linora.log"
-);
+const LOGGING = false;      // Turn logging on or off
+const LOGFILE = __DIR__.'/log/linora.log'; // location of the log file
 
 /**
  * Do not edit below this line without safety goggles.
@@ -28,13 +25,10 @@ DEFINE( "LOGFILE",                      // location of the log file
  * Currently there is just one table but others can be
  * added by chaining statements using semicolons.
  */
-DEFINE( "DBINIT",
-    "CREATE TABLE entries (
-        id bigint not null auto_increment,
-		cat VARCHAR(100),
-		url VARCHAR(500),
-		cap VARCHAR(500),
-		PRIMARY KEY (id)
-	)"
-);
-?>
+const DBINIT = 'CREATE TABLE entries ('.
+    'id bigint not null auto_increment,'.
+    'cat VARCHAR(100),'.
+    'url VARCHAR(500),'.
+    'cap VARCHAR(500),'.
+    'PRIMARY KEY (id)'.
+    ')';

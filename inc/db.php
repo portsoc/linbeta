@@ -3,26 +3,30 @@
 /**
  * Class DBException
  */
-class DBException extends Exception { }
+class DBException extends Exception
+{
+    // stub
+}
 
 /*
 Re-usable database utilities in PDO
 (c) C Lester 2013 (mysqli), 2014 (PDO)
 */
 
-class DB {
-
+class DB
+{
     private $pdo;
 
-    /*
+    /**
      * @param $dbname The name of the database to look for.
      * @return boolean is true of the connection of this object contains a database like the one named.
      * @todo Find an alternative to "SHOW DATABASES LIKE" which isn't Standard SQL - it's one of MySQL's naughty "extras" see also http://stackoverflow.com/questions/15177652/pdo-check-if-database-exists
-    */
-    private function dbExists($dbname) {
+     */
+    private function dbExists($dbname)
+    {
         $showquery = "show databases like '$dbname'";
         $showresult = $this->pdo->query($showquery);
-        return (boolean)($showresult->fetch());
+        return (boolean) ($showresult->fetch());
     }
 
 
@@ -30,7 +34,8 @@ class DB {
      * @param msg $
      * @throws DBException
      */
-    private function throwException($msg = "Unknown DB Error") {
+    private function throwException($msg = "Unknown DB Error")
+    {
         throw new DBException(
             $msg . " " .
             $this->pdo->getCode()." ".
@@ -47,13 +52,13 @@ class DB {
      *
      * If the database doesn't exist, it is created and
      * initialised it using an
-    application function with spec
-            Initialize_myDatabase($DB,$EZ)
-    where $DB refers to the current connection object, and $EZ refers to
-    this instance of DR_easy.
-    */
-    public function __construct() {
-
+     * application function with spec
+     * Initialize_myDatabase($DB,$EZ)
+     * where $DB refers to the current connection object, and $EZ refers to
+     * this instance of DR_easy.
+     */
+    public function __construct()
+    {
         // CONNECT TO THE DATABASE SERVER
         $dsn = "mysql:" . DBHOST . ";charset=UTF-8";
         $option = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
@@ -84,7 +89,8 @@ class DB {
     }
 
     // Close() closes the connection established by the above constructor.
-    public function Close() {
+    public function close()
+    {
         $this->pdo = null;
     }
 
@@ -94,7 +100,8 @@ class DB {
      * @return array of associative arrays where each array represents a result row
      * @throws DBException if the query fails for any technical reason
      */
-    function query($query, $bindings = NULL) {
+    function query($query, $bindings = null)
+    {
 
         try {
             if (isset($bindings)) {
@@ -104,7 +111,7 @@ class DB {
                 $result =$this->pdo->query($query);
             }
 
-            if(strpos($query, 'SELECT') !== false)
+            if (strpos($query, 'SELECT') !== false)
                 return $result->fetchAll();
 
             return $result->rowCount();
@@ -123,7 +130,4 @@ class DB {
     {
         return $this->pdo->lastInsertId();
     }
-
 }
-
-?>
