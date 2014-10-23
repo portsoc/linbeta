@@ -3,7 +3,7 @@
 Takes id/cat/url/cap from $_REQUEST, and inserts it into the database.
 */
 
-include $_SERVER["DOCUMENT_ROOT"] . "/inc/all.php";
+include __DIR__.'/../../../../inc/all.php';
 
 /**
  * Extract all variables necessary for processing the request.

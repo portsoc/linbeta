@@ -1,5 +1,6 @@
 <?php
-include $_SERVER["DOCUMENT_ROOT"] . "/inc/all.php";
+
+include __DIR__.'/../../../inc/all.php';
 
 $DB = new DB;
 $q = "drop database " . DBNAME;

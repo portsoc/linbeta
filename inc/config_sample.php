@@ -15,7 +15,7 @@ DEFINE( "DEBUG",        FALSE       );  // a high level debug switch for applica
 /* Logging */
 DEFINE( "LOGGING",      FALSE       );  // Turn logging on or off
 DEFINE( "LOGFILE",                      // location of the log file
-    $_SERVER["DOCUMENT_ROOT"] .
+    __DIR__ .
     "/log/linora.log"
 );
 
