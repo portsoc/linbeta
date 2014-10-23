@@ -24,17 +24,20 @@ function log($s, $type = "info")
     }
 }
 
-function logError($s) {
+function logError($s)
+{
     log($s, "error");
 }
 
 
-function logWarn($s) {
+function logWarn($s)
+{
     log($s, "warning");
 }
 
 
-function logClose($s) {
+function logClose($s)
+{
     global $log;
 
     if (LOGGING) {
@@ -44,7 +47,6 @@ function logClose($s) {
         }
     }
 }
-
 
 if (LOGGING) {
     $log = fopen(LOGFILE, "a");
