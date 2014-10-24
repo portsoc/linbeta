@@ -12,10 +12,6 @@ const DBPW = 'changeme';    // Password for DB user
 /* Debugging */
 const DEBUG = false;        // a high level debug switch for application debugging
 
-/* Logging */
-const LOGGING = false;      // Turn logging on or off
-const LOGFILE = __DIR__.'/log/linora.log'; // location of the log file
-
 /**
  * Do not edit below this line without safety goggles.
  *
