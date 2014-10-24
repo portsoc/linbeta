@@ -14,8 +14,3 @@ if(!file_exists(__DIR__.'/config.php')) {
 
 include __DIR__.'/config.php';
 include __DIR__.'/db.php';
-
-if (LOGGING) {
-	// For logging, if required
-	include __DIR__.'/log.php';
-}
