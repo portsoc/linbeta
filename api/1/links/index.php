@@ -4,9 +4,10 @@ Returns the current contents of the Linora database as a
 JSON object, representing the arry of results, sorted on
 first the category, then on the caption.
 */
-include $_SERVER["DOCUMENT_ROOT"] . "/inc/all.php";
 
-$in = extract_vars();
+include __DIR__.'/../../../inc/all.php';
+
+$in = extractVars();
 
 try {
     $DB = new DB();
@@ -23,7 +24,4 @@ try {
     exit;
 }
 
-
-
-send_results($rows);
-?>
+sendResults($rows);
