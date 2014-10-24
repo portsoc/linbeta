@@ -17,10 +17,11 @@ try {
         $q = "SELECT * from entries where (cat like '%${f}%' or cap like '%${f}%') order by id desc;";
         $rows = $DB->query($q);
     } else {
-        $rows = $DB->query("SELECT * FROM entries ORDER BY cat,cap ASC");
+        $rows = $DB->query("SELECT * from entries order by id desc");
     }
 } catch (DBException $dbx) {
     echo $dbx;
+    error_log ($dbx);
     exit;
 }
 
