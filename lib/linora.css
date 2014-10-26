@@ -228,4 +228,8 @@ header input[type=radio] {
 	max-width: 5em;
 }
 
-
+#search {
+	flex: 5;
+	padding-left: 1ex;
+	outline: none;
+}
