@@ -169,6 +169,7 @@ header input[type=radio] {
 	padding: 0.25ex 1ex;
 	margin-right: 0.5ex;
 	display: inline-block;
+    cursor: pointer;
 }
 
 .tag {
