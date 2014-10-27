@@ -70,7 +70,7 @@ function checkVarsPresent($in, $keys)
  */
 function insertRecord($in)
 {
-	$meta = array("ok" => true);
+	$meta = array();
 
     // open the DB
     $DB = new DB;
@@ -78,13 +78,11 @@ function insertRecord($in)
 
 	// is this an add or an update?
 	if ($in["xid"] && strlen(trim($in["xid"])) > 0) {
-        $action = 'Update';
-        $meta["msg"] = "{$action} {$in['xid']}.";
+        $meta["action"] = "update";
         $binds = array($in["url"],$in["cap"],$in["cat"],$in["xid"]);
         $query = "UPDATE entries SET url=?, cap=?, cat=? WHERE id=?";
 	} else {
-        $action = 'Insert';
-        $meta["msg"] = "{$action}.";
+        $meta["action"] = "insert";
         $binds = array($in["url"],$in["cap"],$in["cat"]);
 		$query = "INSERT INTO entries (url, cap, cat) VALUES (?,?,?);";
 	}
@@ -92,16 +90,19 @@ function insertRecord($in)
     // add (or update) the record to the database
     $rows = $DB->query($query, $binds);
 
-	// TODO check if the update really worked and feedback to $meta properly
-
-    if ($rows > 0)
-        debug("{$action} successful.");
-    else
-        debug("{$action} failed.");
+	// check if the update really worked and feedback to $meta properly
+	$meta["ok"] = ($rows > 0);
 
 	// read the record back from the database
 	$rows = array();
-	$query = "SELECT * FROM entries WHERE id=" .$DB->lastInsertId().";";
+
+	if ($meta["action"] == "insert") {
+		$id = $DB->lastInsertId();
+	} else {
+		$id = trim($in["xid"]);
+	}
+
+	$query = "SELECT * FROM entries WHERE id=${id};";
     $rows = $DB->query($query);
 
     $DB->close();
