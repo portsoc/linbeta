@@ -234,3 +234,36 @@ header input[type=radio] {
 	padding-left: 1ex;
 	outline: none;
 }
+
+
+.selected {
+	background: #ffa !important;
+	font-weight: bold;
+	color: #333;
+}
+
+.selected:after {
+	content: "  [enter to load]";
+}
+
+.selected div * {
+	font-weight: normal;
+}
+
+ol {
+	padding-left: 2em;
+}
+
+dt {
+	float: left;
+	padding-left: 1em;
+	font-weight: bold;
+}
+
+dd {
+	padding-left: 10em;
+}
+
+h1, h2, h3, p {
+	padding-top: 1em;
+}
