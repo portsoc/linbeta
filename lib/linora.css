@@ -10,48 +10,61 @@ CSS for Linora index.html
 }
 
 body {
-    background-color: #ddf;
+    background-color: #FFF;
     font-family: Calibri, sans-serif;
+	overflow-y: scroll; /* force scroll bar */ 
 }
 
 header {
 	overflow: hidden;
 	display: flex;
+	flex-direction: row-reverse;
 }
 
 header * {
-	font-size: 125%;
-    cursor: pointer;
+	font-size: 120%;
+}
+
+header>nav {
+	flex: 1;
+	display: flex;
 }
 
 header label {
-	padding: 2ex;
-	flex: 1;
+    cursor: pointer;
+	margin: 0.5ex;
+	padding: 1.5ex;
 	text-align: center;
+	flex: 1;
+}
+
+input[type=radio] + label {
+	background: #EFEFEF;
+	border-radius: 0.5ex;
+}
+
+input[type=radio]:checked + label {
+	background: #428bca;
+	color: #fff;
+}
+
+input[type=radio] + label:hover {
+	box-shadow: 0 0.25ex 1em rgba(0,0,0,.1) inset;
+}
+
+input[type=radio]:checked:hover+ label {
 }
 
 
-header>input[type=radio]:checked + label {
-	background: #ddf;
-}
-
-header>input[type=radio] + label {
-	background: #fff;
-}
-
-header>input[type=radio] + label:hover {
-	background: #3F9;
-}
-
-header>input[type=radio]:checked:hover+ label {
-    background: #ddf;
-}
-
-
-header input[type=radio] {
+input[type=radio] {
 	display: none;
 }
 
+a,
+a:visited {
+	color: #000;
+	text-decoration: none;
+}
 
 .content_container {
 	width: 100%;
@@ -101,12 +114,25 @@ header input[type=radio] {
     box-shadow: 0 0 0 rgba(0,0,0,0);
 }
 
+#addzone {
+	position: relative;
+}
 
 #postagebut {
 	position: absolute;
 	right: 0;
 	width: 20%;
-	height: 10em;
+	top: 0;
+	bottom: 0;
+	height: auto;
+	border-radius: 0.5ex;
+	border: none;
+	background: #EFEFEF;
+}
+
+#postagebut:hover {
+	background: #428bca;
+	color: white;
 }
 
 
@@ -121,7 +147,7 @@ header input[type=radio] {
 	padding: 0.5ex;
 	list-style-type: none;
 	overflow: hidden;
-	max-height: 4em;
+	max-height: 10em;
 	transition: opacity 0.5s ease-in-out 0.5s, padding 0.5s ease-in-out, max-height 0.5s ease-in-out;
 }
 
@@ -136,7 +162,7 @@ header input[type=radio] {
 
 
 .links li:nth-child(odd) {
-	background: rgba(255,255,255,0.2); ;
+	background: rgba(200,200,200,0.2); ;
 }
 
 
@@ -173,7 +199,8 @@ header input[type=radio] {
 }
 
 .tag {
-		background: rgba(255,255,255,0.5);
+	margin-top: 0.5ex;
+	background: rgba(255,255,255,0.5);
 }
 
 .tags {
@@ -182,11 +209,13 @@ header input[type=radio] {
 	max-width: 75%;
 	display: inline-block;
 	text-align: right;
+	max-height: 4em;
 }
 
 
 .edit {
-	background: rgba(255,204,204,0.8);
+	background: rgba(51,51,51,0.5 );
+	color: #fff;
 }
 
 
@@ -196,15 +225,9 @@ header input[type=radio] {
 
 
 .title, .tags {
-	transition: all 0.5s ease-in-out;
+	transition: all 1s ease-in-out;
 }
 
-
-@media all and (max-width: 20em) {
-	.title, .tags {
-		opacity: 0;
-	}
-}
 
 .closable:before {
 	content: '✖ ';
@@ -230,9 +253,14 @@ header input[type=radio] {
 }
 
 #search {
-	flex: 5;
+	flex: 1;
 	padding-left: 1ex;
 	outline: none;
+	background: #FFF;
+	border-radius: 0.5ex;
+	margin: 0.5ex;
+	padding: 1.5ex;
+	border: #DDD solid thin;
 }
 
 
@@ -265,4 +293,22 @@ dd {
 
 h1, h2, h3, p {
 	padding-top: 1em;
+}
+
+
+@media all and (max-width: 40em) {
+	.title, .tags {
+		opacity: 0;
+		max-height: 0;
+	}
+
+	#search {
+		display: block;
+		float: none;
+		clear: both;
+	}
+	header {
+		flex-direction: column;
+		font-size: 80%;
+	}
 }
