@@ -238,7 +238,6 @@ header input[type=radio] {
 
 .selected {
 	background: #ffa !important;
-	font-weight: bold;
 	color: #333;
 }
 
