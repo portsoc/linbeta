@@ -23,7 +23,6 @@ if ($required_vars_are_present) {
     	"error_message": "not all required fields were provided.",
     	"error_required_fields": '.json_encode($precondition).',
     	"error_available_fields": '.json_encode($in).',
-    	"debug": '.json_encode($debug).',
     	"ok": false
     }';
 }

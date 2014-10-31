@@ -7,14 +7,6 @@
  * @author Rich Boakes
  */
 
-$debug = array();
-
-function debug($value)
-{
-    global $debug;
-    $debug[] = $value;
-}
-
 function sanitize($what, $how, $method = INPUT_GET)
 {
     $filtered = filter_input($method,$what, $how, FILTER_FLAG_STRIP_LOW || FILTER_FLAG_STRIP_HIGH);
@@ -37,7 +29,7 @@ function extractVars($method = INPUT_GET)
 
 function sendResults($rows = array(), $meta = array(true))
 {
-    global $debug, $_REQUEST;
+    global $_REQUEST;
 
      // Check for presence of "application/json" in the accept header
     $json = !(stripos($_SERVER['HTTP_ACCEPT'], 'application/json') === false);
@@ -45,9 +37,8 @@ function sendResults($rows = array(), $meta = array(true))
         header("Content-Type: application/json");
         $rows = json_encode($rows);
         $meta = json_encode($meta);
-        $debug = json_encode($debug);
         $req = json_encode($_REQUEST);
-        echo '{"meta": '.$meta.', "req": '.$req.', "data": '.$rows.', "debug": '.$debug.'}';
+        echo '{"meta": '.$meta.', "req": '.$req.', "data": '.$rows.'}';
     } else {
         header("Content-Type: text/plain");
         print_r($rows);
