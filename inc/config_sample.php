@@ -23,7 +23,8 @@ const DEBUG = false;        // a high level debug switch for application debuggi
  */
 const DBINIT = 'CREATE TABLE entries ('.
     'id bigint not null auto_increment,'.
-    'cat VARCHAR(100),'.
+	'parent bigint,'.
+	'cat VARCHAR(100),'.
     'url VARCHAR(500),'.
     'cap VARCHAR(500),'.
     'PRIMARY KEY (id)'.
