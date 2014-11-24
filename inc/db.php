@@ -18,19 +18,6 @@ class DB
     private $pdo;
 
     /**
-     * @param $dbname The name of the database to look for.
-     * @return boolean is true of the connection of this object contains a database like the one named.
-     * @todo Find an alternative to "SHOW DATABASES LIKE" which isn't Standard SQL - it's one of MySQL's naughty "extras" see also http://stackoverflow.com/questions/15177652/pdo-check-if-database-exists
-     */
-    private function dbExists($dbname)
-    {
-        $showquery = "show databases like '$dbname'";
-        $showresult = $this->pdo->query($showquery);
-        return (boolean) ($showresult->fetch());
-    }
-
-
-    /**
      * @param msg $
      * @throws DBException
      */
@@ -60,32 +47,17 @@ class DB
     public function __construct()
     {
         // CONNECT TO THE DATABASE SERVER
-        $dsn = "mysql:" . DBHOST . ";charset=UTF-8";
-        $option = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
-        // Manana: maybe also PDO::ATTR_PERSISTENT=>TRUE ??
+        $dsn = "mysql:" . DBHOST . ";dbname=".DBNAME.";";
+        $option = array(
+        	PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        	PDO::ATTR_PERSISTENT => true
+        );
         try {
             $this->pdo = new PDO($dsn, DBUSER, DBPW, $option);
+            $this->pdo->query("use ".DBNAME);
         } catch (PDOException $failure) {
-            DB::throwException("Connect failed during construct");
+             DB::throwException("Connect failed during construct");
         }
-
-        // DOES THE DATABASE EXIST YET?
-
-        if (DB::dbExists(DBNAME)) {
-            // THE DATABASE EXISTS: SO MERELY SELECT IT.
-            $this->pdo->exec("USE " . DBNAME);
-        } else {
-            // ****** ??? wrap the following in a Transaction? ??? ******
-            // THE DATABASE DOESN'T YET EXIST, SO CREATE IT...
-            DB::Query("CREATE DATABASE " . DBNAME);
-
-            // ... SELECT IT ...
-            $this->pdo->exec("USE " . DBNAME);
-
-            // ... AND DO WHATEVER CREATES ETC THE APPLICATION NEEDS.
-            DB::Query(DBINIT);
-        }
-
     }
 
     // Close() closes the connection established by the above constructor.
@@ -100,7 +72,7 @@ class DB
      * @return array of associative arrays where each array represents a result row
      * @throws DBException if the query fails for any technical reason
      */
-    public function query($query, $bindings = null)
+    public function query($query, $bindings = null, &$debug = null)
     {
 
         try {
@@ -111,17 +83,19 @@ class DB
                 $result =$this->pdo->query($query);
             }
 
-            if (strpos($query, 'SELECT') !== false)
+            if (strpos($query, 'SELECT') !== false) {
                 return $result->fetchAll();
+            }
 
             return $result->rowCount();
 
-        } catch (PDOException $e) {
-            echo "DB Error: " . $e->getMessage();
-            echo "DB Error: " . $query;
-            print_r($bindings);
         } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
+        	if (isset($debug)) {
+                $result["meta"]["ok"] = false;
+                $result["meta"]['message'] = $e->getMessage();
+                $result["meta"]['query'] = $query;
+                $result["meta"]['bindings'] = $bindings;
+        	}
         }
 
     }

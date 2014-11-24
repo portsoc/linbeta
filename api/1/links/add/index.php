@@ -12,17 +12,17 @@ $required_vars_are_present = checkVarsPresent($in, $precondition);
 
 if ($required_vars_are_present) {
 	$results = insertRecord($in);
-	sendResults(
-		$results['rows'],
-		$results['meta']
-	); // TODO internationalise?
 } else {
-	header("HTTP/1.0 400 Bad Request");
-    header("x-failure-detail: Not all expected fields were present.");
-    echo '{
-    	"error_message": "not all required fields were provided.",
-    	"error_required_fields": '.json_encode($precondition).',
-    	"error_available_fields": '.json_encode($in).',
-    	"ok": false
-    }';
+    $results = [];
+    $results["meta"]["ok"] = false;
+    $results["meta"]["status"] = 400;
+    $results["meta"]["msg"] = "Bad Request";
+    $results["meta"]["feedback"] = "That request doesn't appear to have all the necessary fields for it to work.";
+    $results["meta"]["developer"] = "See the required and received fields in json metadata to evaluate what was omitted.";
+    $results["meta"]["received"] = $in;
+    $results["meta"]["required"] = $precondition;
+
 }
+
+sendResults($results);
+

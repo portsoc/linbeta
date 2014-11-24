@@ -26,22 +26,36 @@ function extractVars($method = INPUT_GET)
     return $out; // $_REQUEST;
 }
 
+function fail($msg) {
+	$meta["ok"] = false;
+	$debug[] = $msg;
+	sendResults(array(), $meta, $debug);
+    exit(-1);
+}
 
-function sendResults($rows = array(), $meta = array(true))
+/**
+ * @param $results
+ */
+function sendResults($results)
 {
     global $_REQUEST;
 
      // Check for presence of "application/json" in the accept header
     $json = !(stripos($_SERVER['HTTP_ACCEPT'], 'application/json') === false);
+
+    if (isset($results["meta"]["ok"]) && $results["meta"]["ok"] === false) {
+        $status = isset($results["meta"]["status"]) ? $results["meta"]["status"] : 599;
+        $msg = isset($results["meta"]["msg"]) ? $results["meta"]["msg"] : "Oh 'eck!";
+		header("HTTP/1.1 $status $msg");
+    }
+
     if ($json) {
         header("Content-Type: application/json");
-        $rows = json_encode($rows);
-        $meta = json_encode($meta);
-        $req = json_encode($_REQUEST);
-        echo '{"meta": '.$meta.', "req": '.$req.', "data": '.$rows.'}';
+        echo json_encode($results);
     } else {
         header("Content-Type: text/plain");
-        print_r($rows);
+        echo("results: ");
+        var_dump($results);
     }
 }
 
@@ -68,21 +82,25 @@ function insertRecord($in)
     $binds = null;
 
 	// is this an add or an update?
-	if ($in["xid"] && strlen(trim($in["xid"])) > 0) {
+	if (isset($in["xid"]) && strlen(trim($in["xid"])) > 0) {
         $meta["action"] = "update";
-        $binds = array($in["url"],$in["cap"],$in["cat"],$in["xid"]);
-        $query = "UPDATE entries SET url=?, cap=?, cat=? WHERE id=?";
+        $binds = array($in["url"],$in["cap"],$in["cat"],$in["parent"],$in["xid"]);
+        $query = "UPDATE entries SET url=?, cap=?, cat=?, parent=? WHERE id=?";
 	} else {
         $meta["action"] = "insert";
-        $binds = array($in["url"],$in["cap"],$in["cat"]);
-		$query = "INSERT INTO entries (url, cap, cat) VALUES (?,?,?);";
+        if (!isset($in["parent"])) {
+            $in["parent"] = 0;
+        }
+        $binds = array($in["url"],$in["cap"],$in["cat"],$in["parent"]);
+		$query = "INSERT INTO entries (url, cap, cat, parent) VALUES (?,?,?,?);";
 	}
+
 
     // add (or update) the record to the database
     $rows = $DB->query($query, $binds);
 
 	// check if the update really worked and feedback to $meta properly
-	$meta["ok"] = ($rows > 0);
+	$meta["ok"] = (count($rows) > 0);
 
 	// read the record back from the database
 	$rows = array();

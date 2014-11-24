@@ -4,10 +4,9 @@ include __DIR__.'/../../../inc/all.php';
 
 $DB = new DB;
 $q = "drop database " . DBNAME;
-echo "<p>$q</p>";
 
-$rows = $DB->query($q);
+$results["rows"] = $DB->query($q, null, $debug);
+$results["meta"]["ok"] = true;
+$results["meta"]["feedback"] = "Database reset.";
 
-sendResults($rows);
-
-echo "<p>ok DB wiped.</p>";
+sendResults($results);

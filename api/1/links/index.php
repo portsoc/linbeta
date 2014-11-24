@@ -8,6 +8,7 @@ first the category, then on the caption.
 include __DIR__.'/../../../inc/all.php';
 
 $in = extractVars();
+$results = [];
 
 try {
     $DB = new DB();
@@ -15,14 +16,21 @@ try {
     if (isset($in["filter"])) {
         $f = $in["filter"];
         $q = "SELECT * from entries where (cat like '%${f}%' or cap like '%${f}%') order by id desc;";
-        $rows = $DB->query($q);
     } else {
-        $rows = $DB->query("SELECT * from entries order by id desc");
+        $q = "SELECT * from entries order by id desc;";
     }
+
+    $rows = $DB->query($q);
+
+    $results["rows"] = $rows;
+    $results["meta"]["ok"] = true;
+    $results["meta"]["query"] = $q;
+    $results["meta"]["count"] = count($rows);
 } catch (DBException $dbx) {
-    echo $dbx;
     error_log ($dbx);
-    exit;
+    $results["meta"]["ok"] = false;
+    $results["meta"]["exception"] = $dbx;
+    $debug[0] = $dbx;
 }
 
-sendResults($rows);
+sendResults($results);
