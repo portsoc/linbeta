@@ -40,8 +40,9 @@ function sendResults($results)
 {
     global $_REQUEST;
 
-     // Check for presence of "application/json" in the accept header
-    $json = !(stripos($_SERVER['HTTP_ACCEPT'], 'application/json') === false) || $_REQUEST['format'] == 'json';
+    $jsonFormatParameter = isset($_REQUEST['format']) && ($_REQUEST['format'] == 'json');
+    $jsonHeaderRequest = !(stripos($_SERVER['HTTP_ACCEPT'], 'application/json') === false);
+    $json = $jsonHeaderRequest || $jsonFormatParameter;
 
     if (isset($results["meta"]["ok"]) && $results["meta"]["ok"] === false) {
         $status = isset($results["meta"]["status"]) ? $results["meta"]["status"] : 599;
@@ -102,9 +103,6 @@ function insertRecord($in)
 	// check if the update really worked and feedback to $meta properly
 	$meta["ok"] = (count($rows) > 0);
 
-	// read the record back from the database
-	$rows = array();
-
 	if ($meta["action"] == "insert") {
 		$id = $DB->lastInsertId();
 	} else {
@@ -117,4 +115,33 @@ function insertRecord($in)
     $DB->close();
 
 	return array( "rows"=>$rows, "meta"=>$meta );
+}
+
+
+function get_links($in) {
+    $results = [];
+
+    try {
+        $DB = new DB();
+
+        if (isset($in["filter"])) {
+            $f = $in["filter"];
+            $q = "SELECT * from entries where (cat like '%${f}%' or cap like '%${f}%') order by id desc;";
+        } else {
+            $q = "SELECT * from entries order by id desc;";
+        }
+
+        $rows = $DB->query($q);
+
+        $results["rows"] = $rows;
+        $results["meta"]["ok"] = true;
+        $results["meta"]["query"] = $q;
+        $results["meta"]["count"] = count($rows);
+    } catch (DBException $dbx) {
+        error_log ($dbx);
+        $results["meta"]["ok"] = false;
+        $results["meta"]["exception"] = $dbx;
+        $debug[0] = $dbx;
+    }
+    return $results;
 }
