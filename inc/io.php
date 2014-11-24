@@ -41,7 +41,7 @@ function sendResults($results)
     global $_REQUEST;
 
      // Check for presence of "application/json" in the accept header
-    $json = !(stripos($_SERVER['HTTP_ACCEPT'], 'application/json') === false);
+    $json = !(stripos($_SERVER['HTTP_ACCEPT'], 'application/json') === false) || $_REQUEST['format'] == 'json';
 
     if (isset($results["meta"]["ok"]) && $results["meta"]["ok"] === false) {
         $status = isset($results["meta"]["status"]) ? $results["meta"]["status"] : 599;
