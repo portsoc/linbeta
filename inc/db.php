@@ -84,7 +84,7 @@ class DB
             }
 
             if (strpos($query, 'SELECT') !== false) {
-                return $result->fetchAll();
+                return $result->fetchAll(PDO::FETCH_ASSOC);
             }
 
             return $result->rowCount();
