@@ -201,7 +201,7 @@ function updateRecord($in)
         // check if the update really worked and feedback to $meta properly
         $meta["ok"] = (count($rows) > 0);
 
-        $id = trim($in["xid"]);
+        $id = (int) trim($in["xid"]);
 
         $query = "SELECT * FROM entries WHERE id=${id};";
         $rows = $DB->query($query);
