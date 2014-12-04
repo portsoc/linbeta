@@ -136,7 +136,7 @@ function insertRecord($in)
 	if ($meta["action"] == "insert") {
 		$id = $DB->lastInsertId();
 	} else {
-		$id = trim($in["xid"]);
+		$id = (int) trim($in["xid"]);
 	}
 
 	$query = "SELECT * FROM entries WHERE id=${id};";
