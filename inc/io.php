@@ -279,7 +279,8 @@ function get_links($in) {
 
 
         if (isset($in["id"])) {
-            $clause = "where id = ${in['id']}";
+            $id = (int) $in['id'];
+            $clause = "where id = {$id}";
         } else {
             if (isset($in["filter"])) {
                 $f = $in["filter"];
