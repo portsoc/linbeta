@@ -1,0 +1,341 @@
+/*
+CSS for Linora index.html
+(c) Kit Lester 2013
+ */
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+    background-color: #FFF;
+    font-family: Calibri, sans-serif;
+	overflow-y: scroll; /* force scroll bar */ 
+}
+
+header {
+	overflow: hidden;
+	display: flex;
+	flex-direction: row-reverse;
+	flex-wrap: wrap;
+	width: 100%;
+	z-index: 100;
+	background: #FFF;
+}
+
+header * {
+	font-size: 120%;
+}
+
+header>nav {
+	flex: 1;
+	display: flex;
+    flex-basis: 45%;
+}
+
+header label {
+    cursor: pointer;
+	margin: 0.5ex;
+	padding: 1.5ex;
+	text-align: center;
+	flex: 1;
+}
+
+
+
+input[type=radio] + label {
+	background: #EFEFEF;
+	border-radius: 0.5ex;
+}
+
+input[type=radio]:checked + label {
+	background: #428bca;
+	color: #fff;
+}
+
+input[type=radio] + label:hover {
+	box-shadow: 0 0.25ex 1em rgba(0,0,0,.1) inset;
+}
+
+input[type=radio]:checked:hover+ label {
+}
+
+
+input[type=radio] {
+	display: none;
+}
+
+a,
+a:visited {
+	color: #000;
+	text-decoration: none;
+}
+
+.content_container {
+	width: 100%;
+}
+
+.panel {
+	margin: 1em;
+	position: relative;
+}
+
+.stealth {
+	overflow: hidden;
+	visibility: hidden;
+	display: none;
+}
+
+
+.feedback {
+	background: #777;
+	background: rgba(0,0,0,0.5);
+	color: #3F9;
+	padding: 0;
+	overflow: hidden;
+	border-radius: 0.5ex;
+	margin: 0.5ex;
+    flex-basis: 100%;
+}
+
+.feedback:hover {
+	box-shadow: 0 0 1em #555;
+	background: #3F9;
+	color: #555;
+	cursor: pointer;
+}
+
+.feedback>p {
+	transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out, opacity 0.25s;
+	padding: 0.5ex 1ex;
+	max-height: 25ex;
+	opacity: 1;
+}
+
+.feedback>p.fedback {
+    transition: max-height 0.5s ease-in-out 0.5s, padding 0.5s ease-in-out 0.5s, opacity 0.25s;
+	padding-top: 0;
+	padding-bottom: 0;
+    opacity: 0;
+    max-height: 0;
+    box-shadow: 0 0 0 rgba(0,0,0,0);
+}
+
+#addzone {
+	position: relative;
+}
+
+#postagebut {
+	position: absolute;
+	right: 0;
+	width: 20%;
+	top: 0;
+	bottom: 0;
+	height: auto;
+	border-radius: 0.5ex;
+	border: none;
+	background: #EFEFEF;
+}
+
+#postagebut:hover {
+	background: #428bca;
+	color: white;
+}
+
+
+.links {
+	width: 100%;
+	padding: 0;
+}
+
+.links li {
+	display: flex;
+	clear: both;
+	border: none;
+	padding: 0.5ex;
+	list-style-type: none;
+	overflow: hidden;
+	max-height: 10em;
+	transition: opacity 0.5s ease-in-out 0.5s, padding 0.5s ease-in-out, max-height 0.5s ease-in-out;
+}
+
+
+.links li.switchingoff {
+	transition: opacity 0.5s ease-in-out, padding 0.5s ease-in-out 0.5s, max-height 0.5s ease-in-out 0.5s;
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+
+.links li:nth-child(odd) {
+	background: rgba(200,200,200,0.2); ;
+}
+
+.links li>a {
+	flex: 1;
+	flex-shrink: 1;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.links li>div {
+	flex: 1;
+	flex-shrink: 4;
+}
+
+.panel {
+	margin: 1em;
+	position: relative;
+}
+
+.panel label {
+    display: block;
+    min-height: 2em;
+    margin: 0.5em;
+    width: 100%;
+    vertical-align: middle;
+}
+.panel input {
+    left: 15%;
+    margin: 0;
+    min-height: 2em;
+    position: absolute;
+    right: 5em;
+    width: 60%;
+}
+
+
+.tag, .edit {
+	color: #000;
+	border: solid rgba(0,0,0,0.5) thin;
+	border-radius: 0.5ex;
+	padding: 0.25ex 1ex;
+	margin-right: 0.5ex;
+	display: inline-block;
+    cursor: pointer;
+}
+
+.tag {
+	margin-top: 0.5ex;
+	background: rgba(255,255,255,0.5);
+}
+
+.tags {
+	font-size: 80%;
+	float: right;
+	max-width: 75%;
+	display: inline-block;
+	text-align: right;
+	max-height: 4em;
+}
+
+
+.edit {
+	background: rgba(51,51,51,0.5 );
+	color: #fff;
+}
+
+
+.edit:hover {
+	background: rgba(255,180,180,1);
+}
+
+
+.title, .tags {
+	transition: all 1s ease-in-out;
+}
+
+
+.closable:before {
+	content: '✖ ';
+}
+
+
+.dropalert {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: #666;
+	background: rgba(0,0,0,0.4);
+	color: white;
+	font-size: 500%;
+	text-align: center;
+}
+
+.dropalert * {
+	margin: auto;
+	max-width: 5em;
+}
+
+#search {
+	flex: 1;
+	padding-left: 1ex;
+	outline: none;
+	background: #FFF;
+	border-radius: 0.5ex;
+	margin: 0.5ex;
+	padding: 1.5ex;
+	border: #DDD solid thin;
+    flex-basis: 50%;
+}
+
+
+.selected {
+	background: #F77 !important;
+	color: #CCC;
+	border-radius: 0.5ex;
+}
+
+.selected:after {
+/*	content: "  [enter to load]"; */
+}
+
+.selected div * {
+	font-weight: normal;
+}
+
+ol {
+	padding-left: 2em;
+}
+
+dt {
+	float: left;
+	padding-left: 1em;
+	font-weight: bold;
+}
+
+dd {
+	padding-left: 10em;
+}
+
+h1, h2, h3, p {
+	padding-top: 1em;
+}
+
+
+@media all and (max-width: 40em) {
+	.title, .tags {
+		opacity: 0;
+		max-height: 0;
+	}
+
+	#search {
+		display: block;
+		float: none;
+		clear: both;
+	}
+	header {
+		flex-direction: column;
+		font-size: 80%;
+	}
+	.links li>div {
+		flex: 0;
+	}
+}

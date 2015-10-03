@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+	<head>
+		<title>LinOrA - Link Organizer and Archiver</title>
+		<meta charset="UTF8" />
+
+		<meta name="description" content="LinOrA - an Organizer and Archiver for Web-links"/>
+		<meta name="author" content="Kit Lester, Rich Boakes"/>
+		<meta name="keywords" content="Web-link, Organizer, Archiver, uri, bookmarks"/>
+
+		<link rel="icon" href="favicon.png">
+		<link type="text/css" rel="stylesheet" href="lib/linora.css">
+
+		<script src="lib/xhr2.js"></script>
+		<script src="lib/linora.js"></script>
+		<script src="lib/feedback.js"></script>
+		<script src="lib/drag.js"></script>
+		<script src="lib/keys.js"></script>
+	</head>
+
+	<body>
+		<form id="postage" name="postage" autocomplete="off"></form>
+		<form id="pageselect" name="pageselect" autocomplete="off"></form>
+
+		<header>
+			<div id="feedback" class="feedback">
+			</div>
+			<nav>
+				<input form="pageselect" type="radio" name="top" id="links.flip" checked><label for="links.flip">links</label>
+				<input form="pageselect" type="radio" name="top" id="add.flip"><label for="add.flip">add</label>
+				<input form="pageselect" type="radio" name="top" id="help.flip"><label for="help.flip">help</label>
+			</nav>
+			<input form="searchform" action="" name="search" autofocus placeholder="Type to Search Linora" id="search" type="text" maxlength="200" autocomplete="off">
+		</header>
+
+
+
+		<div class="content_container">
+
+			<div id="add" class="panel stealth">
+				<div class="form" id="addzone">
+					<button form ="postage" type="button" id="postagebut" value="Submit">Submit</button>
+					<label>URL <input form="postage" name="url" id="postageurl" type="text" maxlength="200" placeholder="http://example.org/path/to/page/"></label>
+					<label>Caption <input form="postage" name="cap" id="postagecap" type="text" maxlength="300" placeholder="Title or description"></label>
+					<label>Tags <input form="postage" name="cat" id="postagecat" type="text" maxlength="100" placeholder="tag, tag, multi-word tag, another tag"></label>
+					<input form="postage" name="xid" id="postageid" type="hidden">
+				</div>
+			</div>
+
+			<div id="links" class="panel stealth"></div>
+
+			<div id="help" class="panel stealth"></div>
+
+			<div id="dropalert" class="dropalert stealth">
+				<h1>⤵</h1>
+				<p>Drop here to add a link.</p>
+			</div>
+		</div>
+	</body>
+</html>
