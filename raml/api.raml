@@ -1,0 +1,145 @@
+#%RAML 0.8
+title: Linora
+version: v2
+baseUri: https://linora.dev/api/2/
+mediaType: application/json
+traits:
+- jsonable:
+    queryParameters:
+        format:
+            description: Override any header-based content negotiation and use the format requested here.  The only valid override format is currently `json`.
+            type: string
+            required: false
+            example: format=json
+- pageable:
+    queryParameters:
+        offset:
+            description: Skip over a number of elements by specifying an offset value for the query
+            type: integer
+            required: false
+            example: 20
+            default: 0
+        limit:
+            description: Limit the number of elements on the response
+            type: integer
+            required: false
+            example: 400
+            default: 20
+- filterable:
+    queryParameters:
+        filter:
+            description: Filter the returned results using a substring match.
+            type: string
+            required: false
+            example: foo
+- modifyable:
+    queryParameters:
+        url:
+            description: A URL that should be stored.
+            type: string
+            required: true
+            example: http://example.org/
+        cap:
+            displayName: caption
+            description: A caption or display-name for the link.
+            type: string
+            required: false
+            example: The infamous example.org example
+        cat:
+            displayName: category
+            description: A comma separated list of categories that this link belongs to.
+            type: string
+            required: false
+            example: foo, bar, baz, examples
+- proxyable:
+    queryParameters:
+        url:
+            description: The address of the page to examine
+            type: string
+            required: true
+            example: http://example.org
+            default: ''
+
+/links:
+    description: A collection of all links
+    get:
+        description: Retrieve a list of links
+        is: [
+            pageable,
+            filterable,
+            jsonable
+        ]
+    post:
+        description: Create a new entry, assign it an id, and return that ID back to the client.
+        is: [
+            modifyable,
+            jsonable
+        ]
+        responses:
+          200:
+            body:
+              "application/json":
+                description: |
+                    Returns the media file.
+                example: |
+                    {}
+              "text/plain":
+                  description: |
+                      Returns the media file.
+                  example: |
+                      A plain text example.
+
+          599:
+            body:
+              "text/plain":
+                  description: |
+                      Generic server error sent if it's gone wrong in some infathomable way.
+                  example: |
+                      Oh dear...
+
+
+    /{linkId}/:
+        description: An item in the collection of all links
+        get:
+            description: Return the link defined by {linkId}.
+        post:
+            description: Replace (a very blunt update) the entry specified by {linkId} with the link defined in this request.  If an ID is included in the payload it is ignored in favour of {linkId} from the URL.
+            is: [
+                modifyable,
+                jsonable
+            ]
+        put:
+            description: Replace (a very blunt update) the entry specified by {linkId} with the link defined in this request.  If an ID is included in the payload it is ignored in favour of {linkId} from the URL.
+            is: [
+                modifyable,
+                jsonable
+            ]
+        delete:
+            description: Delete the entry defined by {linkId}
+
+/reset:
+    description: Clear the database
+/proxy:
+    description: Proxy
+    get:
+        description: Retrieve a URL via HTTP get and (from the resulting content) extract the `meta` tags, the page title and the host name.
+        is: [
+            proxyable,
+            jsonable
+        ]
+        responses:
+            200:
+              body:
+                "application/json":
+                  description: |
+                      Returns the media file.
+                  example: !include examples/proxy_get.json
+                "text/plain":
+                    description: |
+                        Returns the media file.
+                    example: !include examples/proxy_get.txt
+
+/init:
+    description: Initialize the database
+    get:
+        description: Initialize the database structure.

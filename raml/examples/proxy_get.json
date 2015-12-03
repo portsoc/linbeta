@@ -1,0 +1,27 @@
+{
+    "meta": {
+        "ok": true,
+        "request": {
+            "url": "http://port.ac.uk",
+            "format": "json"
+        },
+        "verb": "GET",
+        "path": [
+            "proxy",
+            ""
+        ]
+    },
+    "tags": {
+        "viewport": "width=device-width, initial-scale=1",
+        "google-site-verification": "eufaA8KpSVLizzgcmKi2ycwKwaQtFCr2Uow2aWjt6Ic",
+        "dc_author": "University of Portsmouth",
+        "application-name": "University of Portsmouth",
+        "msapplication-tilecolor": "#FFFFFF",
+        "msapplication-tileimage": "http://www.port.ac.uk/mstile-144x144.png",
+        "msapplication-square70x70logo": "http://www.port.ac.uk/mstile-70x70.png",
+        "msapplication-square150x150logo": "http://www.port.ac.uk/mstile-150x150.png",
+        "msapplication-wide310x150logo": "http://www.port.ac.uk/mstile-310x150.png",
+        "msapplication-square310x310logo": "http://www.port.ac.uk/mstile-310x310.png",
+        "title": "University of Portsmouth"
+    }
+}

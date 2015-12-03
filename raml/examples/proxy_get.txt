@@ -1,0 +1,44 @@
+results: array(2) {
+  ["meta"]=>
+  array(4) {
+    ["ok"]=>
+    bool(true)
+    ["request"]=>
+    array(1) {
+      ["url"]=>
+      string(17) "http://port.ac.uk"
+    }
+    ["verb"]=>
+    string(3) "GET"
+    ["path"]=>
+    array(1) {
+      [0]=>
+      string(5) "proxy"
+    }
+  }
+  ["tags"]=>
+  array(11) {
+    ["viewport"]=>
+    string(35) "width=device-width, initial-scale=1"
+    ["google-site-verification"]=>
+    string(43) "eufaA8KpSVLizzgcmKi2ycwKwaQtFCr2Uow2aWjt6Ic"
+    ["dc_author"]=>
+    string(24) "University of Portsmouth"
+    ["application-name"]=>
+    string(24) "University of Portsmouth"
+    ["msapplication-tilecolor"]=>
+    string(7) "#FFFFFF"
+    ["msapplication-tileimage"]=>
+    string(40) "http://www.port.ac.uk/mstile-144x144.png"
+    ["msapplication-square70x70logo"]=>
+    string(38) "http://www.port.ac.uk/mstile-70x70.png"
+    ["msapplication-square150x150logo"]=>
+    string(40) "http://www.port.ac.uk/mstile-150x150.png"
+    ["msapplication-wide310x150logo"]=>
+    string(40) "http://www.port.ac.uk/mstile-310x150.png"
+    ["msapplication-square310x310logo"]=>
+    string(40) "http://www.port.ac.uk/mstile-310x310.png"
+    ["title"]=>
+    string(24) "University of Portsmouth"
+  }
+}
