@@ -1,5 +1,4 @@
 RewriteEngine On
-RewriteBase /api/2
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

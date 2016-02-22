@@ -136,7 +136,7 @@ function insertRecord($in)
 	if ($meta["action"] == "insert") {
 		$id = $DB->lastInsertId();
 	} else {
-		$id = trim($in["xid"]);
+		$id = (int) trim($in["xid"]);
 	}
 
 	$query = "SELECT * FROM entries WHERE id=${id};";
@@ -201,7 +201,7 @@ function updateRecord($in)
         // check if the update really worked and feedback to $meta properly
         $meta["ok"] = (count($rows) > 0);
 
-        $id = trim($in["xid"]);
+        $id = (int) trim($in["xid"]);
 
         $query = "SELECT * FROM entries WHERE id=${id};";
         $rows = $DB->query($query);
@@ -279,7 +279,8 @@ function get_links($in) {
 
 
         if (isset($in["id"])) {
-            $clause = "where id = ${in['id']}";
+            $id = (int) $in['id'];
+            $clause = "where id = {$id}";
         } else {
             if (isset($in["filter"])) {
                 $f = $in["filter"];
