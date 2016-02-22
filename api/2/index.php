@@ -4,10 +4,12 @@ A simple RESTful API router.
 */
 
 include __DIR__.'/../../inc/all.php';
-$results["meta"]["verb"] = $_SERVER['REQUEST_METHOD'];
+
+$verb = $_SERVER['REQUEST_METHOD'];
+$path = explode('/', ltrim($_SERVER['PATH_INFO'], "/"));
 
 // extract and sanitise get/post payload
-switch ($_SERVER['REQUEST_METHOD']) {
+switch ($verb) {
     case "POST":
     case "PUT":
         $in = extractVars(INPUT_POST);
@@ -16,68 +18,80 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $in = extractVars();
 }
 
+if (isset($path[1]) && trim($path[1]) != "") {
+    $in["id"] = trim(sanitize($path[1]));
+}
+
 $results = [];
 $results["meta"]["ok"] = true;
-$verb = $_SERVER['REQUEST_METHOD'];
-$path = explode('/', ltrim($_SERVER['PATH_INFO'], "/"));
+$results["meta"]["verb"] = $verb;
+
 
 // todo use call_user_func with a whitelist to make this much shorter
 
-
 switch ($path[0]) {
     case "test":
+        break;
+    case "init":
+        if ($verb == "GET") {
+            // TODO GET isn't the right verb, but it means we can kick
+            // it off from a browser query, for now...
+            $results = init_db ( $in );
+        }
+        break;
+    case "reset":
+        if ($verb == "GET") {
+            // TODO GET isn't the right verb, but it means we can kick
+            // it off from a browser query, for now...
+            $results = reset_db ( $in );
+        }
+        break;
+    case "proxy" :
+        if ($verb == "GET") {
+            $url = $in["url"];
+            try {
+            	$tags = get_meta_tags($url);
+            } catch (Exception $failure) {
+            	fail( $failure );
+            }
+
+            // title isn't covered by get_meta_tags to pull it from the page content
+            $str = file_get_contents($url);
+            preg_match("/<title>(.*)<\/title>/", $str, $matches);
+
+            // if there's a title, use it, if not, the domain will do
+            $tags["title"] = array_key_exists(1, $matches) ? $matches[1] :  parse_url($url)["host"];
+
+            $results["tags"] = $tags;
+        }
         break;
     case "links":
 
         switch ($verb) {
 
             case "GET":
-                $in = extractVars();
-                if (isset($path[1]) && trim($path[1]) != "") {
-                    $in["id"] = $path[1];
-                }
                 $results = get_links ( $in );
                 break;
             case "POST":
-                $in = extractVars(INPUT_POST);
-                if (isset($path[1]) && trim($path[1]) != "") {
-                    $in["id"] = $path[1];
-                    $results = updateRecord( $in );
-                } else {
-                    $results = insertRecord( $in );
-                }
+                $results = insertRecord( $in );
                 break;
             case "PATCH":
-                $in = extractVars(INPUT_POST);
-                if (isset($path[1]) && trim($path[1]) != "") {
-                    $in["id"] = $path[1];
-                    $results = notImplementedYet( $in );
-                } else {
-                    $results = methodNotAllowed($in);
-                }
-                break;
             case "PUT":
-                $in = extractVars(INPUT_POST);
-                if (isset($path[1]) && trim($path[1]) != "") {
-                    $in["id"] = $path[1];
+                if (isset($in["id"])) {
                     $results = notImplementedYet( $in );
                 } else {
                     $results = methodNotAllowed($in);
                 }
                 break;
             case "DELETE":
-                $in = extractVars(INPUT_POST);
-                if (isset($path[1]) && trim($path[1]) != "") {
-                    $in["id"] = $path[1];
+                if (isset($in["id"])) {
                     $results = deleteRecord( $in );
                 } else {
                     $results = methodNotAllowed($in);
                 }
-
-
                 break;
             default:
-                $results["meta"]["feedback"] = "Unrecognised verb for /links GET, POST, PUT and DELETE are supported";
+                $results["meta"]["feedback"] = "For ".$path[0]." GET, POST, PUT and DELETE are supported";
                 $results["meta"]["status"] = 400;
                 $results["meta"]["ok"] = false;
         }
@@ -92,5 +106,3 @@ $results["meta"]["verb"] = $verb;
 $results["meta"]["path"] = $path;
 
 sendResults($results);
-
-
