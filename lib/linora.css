@@ -137,6 +137,7 @@ a:visited {
 	border-radius: 0.5ex;
 	border: none;
 	background: #EFEFEF;
+	cursor: pointer;
 }
 
 #postagebut:hover {
@@ -337,5 +338,20 @@ h1, h2, h3, p {
 	}
 	.links li>div {
 		flex: 0;
+	}
+}
+
+@media all and (max-width: 30em){
+	#postagebut{
+		top: auto;
+		bottom: auto;
+		height: 5em;
+		width: 100%;
+		margin: auto;
+
+	}
+
+	.panel input{
+		width: 80%;
 	}
 }
