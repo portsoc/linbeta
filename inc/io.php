@@ -1,7 +1,7 @@
 <?php
 /**
  * @module /inc/io
- * A library for general operations 
+ * A library for general operations
  *
  * @copyright University of Portsmouth 2014
  * @author Rich Boakes
@@ -22,7 +22,7 @@ function extractVars($method = INPUT_GET)
     foreach ($_REQUEST as $key => $value) {
         $out[$key] = stripslashes(strip_tags(urldecode(filter_input($method,$key, FILTER_SANITIZE_STRING))));
     }
-    
+
     return $out; // $_REQUEST;
 }
 
@@ -30,7 +30,7 @@ function fail($msg) {
 	$meta["ok"] = false;
 	$debug[] = $msg;
 	sendResults(array(), $meta, $debug);
-    exit(-1);
+//    exit(-1);
 }
 
 /**
@@ -44,12 +44,12 @@ function sendResults($results)
     $jsonHeaderRequest = !(stripos($_SERVER['HTTP_ACCEPT'], 'application/json') === false);
     $json = $jsonHeaderRequest || $jsonFormatParameter;
 
-    if (isset($results["meta"]["ok"]) && $results["meta"]["ok"] === false) {
-        $status = isset($results["meta"]["status"]) ? $results["meta"]["status"] : 599;
-        $msg = isset($results["meta"]["msg"]) ? $results["meta"]["msg"] : "Oh 'eck!";
-    } else {
+    if (isset($results["meta"]["ok"]) && $results["meta"]["ok"] !== false) {
         $status = isset($results["meta"]["status"]) ? $results["meta"]["status"] : 200;
         $msg = isset($results["meta"]["msg"]) ? $results["meta"]["msg"] : "OK";
+    } else {
+        $status = isset($results["meta"]["status"]) ? $results["meta"]["status"] : 599;
+        $msg = isset($results["meta"]["msg"]) ? $results["meta"]["msg"] : "Oh 'eck!";
     }
     header("HTTP/1.1 $status $msg");
 
@@ -73,6 +73,28 @@ function checkVarsPresent($in, $keys)
     }
     return true;
 }
+
+function init_db($in) {
+    $DB = new DB;
+    $rows[] = $DB->query("CREATE DATABASE " . DBNAME);
+    $rows[] = $DB->query("USE " . DBNAME);
+    $rows[] = $DB->query(DBINIT);
+    $results["rows"] = $rows;
+    $results["meta"]["ok"] = true;
+    $results["meta"]["feedback"] = "Database created.";
+    return $results;
+}
+
+function reset_db($in) {
+    $DB = new DB;
+    $q = "drop database " . DBNAME;
+    $results["rows"] = $DB->query($q, null, $debug);
+    $results["meta"]["ok"] = true;
+    $results["meta"]["feedback"] = "Database reset.";
+    return $results;
+}
+
+
 
 /**
  * Extract all variables necessary for processing the request.
@@ -98,7 +120,6 @@ function insertRecord($in)
         $binds = array($in["url"],$in["cap"],$in["cat"],$in["parent"]);
 		$query = "INSERT INTO entries (url, cap, cat, parent) VALUES (?,?,?,?);";
 	}
-
 
     // add (or update) the record to the database
     $rows = $DB->query($query, $binds);

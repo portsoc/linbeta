@@ -16,6 +16,7 @@ Re-usable database utilities in PDO
 class DB
 {
     private $pdo;
+    private $dsn;
 
     /**
      * @param msg $
@@ -23,12 +24,18 @@ class DB
      */
     private function throwException($msg = "Unknown DB Error")
     {
+        if ($this->pdo) {
+            $msg .= $this->pdo->errorInfo()[1];
+            $msg .= " ";
+            $msg .= $this->pdo->errorInfo()[2];
+        }
+
+        if ($this->dsn) {
+            $msg .= "DSN: ".$this->dsn;
+        }
+
         throw new DBException(
-            $msg . " " .
-            $this->pdo->getCode()." ".
-            $this->pdo->getInfo()." ".
-            $this->pdo->errorInfo()[1]." ".
-            $this->pdo->errorInfo()[2]
+            $msg
         );
     }
 
@@ -47,17 +54,30 @@ class DB
     public function __construct()
     {
         // CONNECT TO THE DATABASE SERVER
-        $dsn = "mysql:" . DBHOST . ";dbname=".DBNAME.";";
+        $this->dsn = "mysql:host=" . DBHOST.";";
+
+        // mysql:host=localhost;dbname=testdb
+        // mysql:host=localhost;port=3307;dbname=testdb
+        // mysql:unix_socket=/tmp/mysql.sock;dbname=testdb
+
+
         $option = array(
         	PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         	PDO::ATTR_PERSISTENT => true
         );
+
         try {
-            $this->pdo = new PDO($dsn, DBUSER, DBPW, $option);
-            $this->pdo->query("use ".DBNAME);
+            $this->pdo = new PDO($this->dsn, DBUSER, DBPW, $option);
         } catch (PDOException $failure) {
              DB::throwException("Connect failed during construct");
         }
+
+        try {
+            $this->pdo->query("use ".DBNAME);
+        } catch (PDOException $failure) {
+             // DB::throwException("Connect failed during use");
+        }
+
     }
 
     // Close() closes the connection established by the above constructor.
